@@ -1,0 +1,20 @@
+{
+  "name": "studio-lumina-salao",
+  "version": "1.0.0",
+  "description": "Website moderno para Salão de Beleza e Spa",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "salao-de-beleza",
+    "spa",
+    "hair",
+    "beauty"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vercel": "^59.9.1"
+  }
+}
