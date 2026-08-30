@@ -1,5 +1,5 @@
 /**
- * STUDIO LUMINA - SCRIPT PRINCIPAL DA APLICAÇÃO
+ * GLAMOUR STUDIO - SCRIPT PRINCIPAL DA APLICAÇÃO
  * Gerencia renderização dinâmica de serviços, produtos da boutique, filtros, sliders e status.
  */
 
@@ -76,6 +76,7 @@ function initSalonStatus() {
 
 /* ----------------- Renderizar Categorias & Filtros de Serviços ----------------- */
 let currentCategory = 'all';
+let currentProfessional = 'all';
 let searchQuery = '';
 
 function renderCategories() {
@@ -98,6 +99,19 @@ function renderCategories() {
         });
     });
 
+    // Filtros de profissional (se existirem na página, ex: agendar.html)
+    const proFilterContainer = document.getElementById('professionalTabs');
+    if (proFilterContainer) {
+        proFilterContainer.querySelectorAll('.pro-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                proFilterContainer.querySelectorAll('.pro-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentProfessional = btn.dataset.pro;
+                filterServices();
+            });
+        });
+    }
+
     const searchInput = document.getElementById('serviceSearchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -114,10 +128,15 @@ function filterServices() {
         filtered = filtered.filter(s => s.category === currentCategory);
     }
 
+    if (currentProfessional !== 'all') {
+        filtered = filtered.filter(s => s.professionalId === currentProfessional);
+    }
+
     if (searchQuery) {
         filtered = filtered.filter(s => 
             s.name.toLowerCase().includes(searchQuery) || 
-            s.description.toLowerCase().includes(searchQuery)
+            s.description.toLowerCase().includes(searchQuery) ||
+            (s.professionalName && s.professionalName.toLowerCase().includes(searchQuery))
         );
     }
 
@@ -129,6 +148,25 @@ function renderServices(category) {
     filterServices();
 }
 
+window.filterByProfessional = function(proId) {
+    currentProfessional = proId;
+    const proFilterContainer = document.getElementById('professionalTabs');
+    if (proFilterContainer) {
+        proFilterContainer.querySelectorAll('.pro-filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.pro === proId);
+        });
+    }
+    filterServices();
+    
+    // Rolar suavemente para a lista de serviços se estiver na página
+    const servicesSection = document.getElementById('servicos-agendamento') || document.getElementById('servicos');
+    if (servicesSection) {
+        const headerHeight = document.getElementById('header')?.offsetHeight || 70;
+        const topPos = servicesSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+    }
+};
+
 function renderServicesList(services) {
     const grid = document.getElementById('servicesGrid');
     if (!grid) return;
@@ -138,7 +176,10 @@ function renderServicesList(services) {
             <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
                 <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔍</div>
                 <p style="font-size: 1.1rem; font-weight: 600;">Nenhum serviço encontrado</p>
-                <p style="font-size: 0.9rem;">Tente buscar por outro termo ou selecione outra categoria.</p>
+                <p style="font-size: 0.9rem;">Tente buscar por outro termo ou limpe os filtros.</p>
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-top:1rem;" onclick="window.resetServiceFilters()">
+                    Limpar Filtros
+                </button>
             </div>
         `;
         return;
@@ -154,6 +195,9 @@ function renderServicesList(services) {
             priceHtml = `<div class="service-price" style="font-size:0.92rem; color:var(--gold-600); font-weight:700;">Consultar no WhatsApp</div>`;
         }
 
+        const proIcon = s.professionalId === 'luciana-bezerra' ? '💇‍♀️' : '🌸';
+        const proName = s.professionalName || (s.professionalId === 'luciana-bezerra' ? 'Luciana Bezerra' : 'Graziele Bezerra');
+
         return `
         <div class="service-card reveal-fade">
             <div class="service-card-image">
@@ -161,17 +205,18 @@ function renderServicesList(services) {
                 ${s.badge ? `<span class="service-badge">${s.badge}</span>` : ''}
             </div>
             <div class="service-card-body">
-                <div class="service-meta">
+                <div class="service-meta" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem;">
                     <span>⏱️ ${s.duration}</span>
-                    <span>•</span>
-                    <span>🌟 Atendimento VIP</span>
+                    <span class="service-pro-pill" style="font-size:0.78rem; font-weight:600; background:var(--gold-100); color:var(--gold-700); padding:0.2rem 0.6rem; border-radius:999px; border:1px solid var(--gold-300);">
+                        ${proIcon} ${proName}
+                    </span>
                 </div>
                 <h3 class="service-title">${s.name}</h3>
                 <p class="service-description">${s.description}</p>
                 <div class="service-card-footer">
                     ${priceHtml}
                     <button type="button" class="btn btn-primary btn-sm" onclick="window.bookingApp?.open('${s.id}')">
-                        Agendar
+                        <span>📅</span> Agendar
                     </button>
                 </div>
             </div>
@@ -180,6 +225,31 @@ function renderServicesList(services) {
 
     initScrollEffects();
 }
+
+window.resetServiceFilters = function() {
+    currentCategory = 'all';
+    currentProfessional = 'all';
+    searchQuery = '';
+    
+    const searchInput = document.getElementById('serviceSearchInput');
+    if (searchInput) searchInput.value = '';
+    
+    const catContainer = document.getElementById('categoryTabs');
+    if (catContainer) {
+        catContainer.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.cat === 'all');
+        });
+    }
+    
+    const proContainer = document.getElementById('professionalTabs');
+    if (proContainer) {
+        proContainer.querySelectorAll('.pro-filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.pro === 'all');
+        });
+    }
+    
+    filterServices();
+};
 
 /* ----------------- Renderizar Boutique de Produtos ----------------- */
 function renderProducts() {

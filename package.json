@@ -1,9 +1,13 @@
 {
-  "name": "studio-lumina-salao",
+  "name": "glamour-studio",
   "version": "1.0.0",
-  "description": "Website moderno para Salão de Beleza e Spa",
+  "description": "Website oficial do Glamour Studio por Graziele & Luciana Bezerra",
   "main": "index.html",
+  "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "deploy": "vercel --prod"
   },
   "keywords": [
@@ -15,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "vercel": "^59.9.1"
+    "vercel": "^59.9.1",
+    "vite": "^8.2.2"
   }
 }

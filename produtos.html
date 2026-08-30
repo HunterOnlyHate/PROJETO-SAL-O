@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Boutique Oficial WePink Pronta Entrega | Glamour Studio</title>
+    <meta name="description" content="Compre produtos originais WePink com Pronta Entrega e Frete Grátis em Bonfim - RR. Perfumes luxo, Body Splashes, Hair Mist e Óleo Booster Repair no Glamour Studio.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/logo-glamour-studio.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container top-announcement-content">
+            <div>📍 Av. Tuxaua Farias, 259, Bonfim - RR &nbsp;|&nbsp; 🛍️ Vendas WePink: (95) 98429-8305 • 🚚 Entrega Grátis</div>
+            <div id="salonStatusPill" class="hero-status-pill" style="background: rgba(255,255,255,0.08); border-color: rgba(223,199,155,0.3); color: var(--gold-200);">
+                <span class="status-dot"></span>
+                <span>Carregando status...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Principal -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="assets/images/logo-glamour-studio.jpg" alt="Logo Glamour Studio" class="logo-badge-img">
+                <div class="logo-text-box">
+                    <span class="logo-main">GLAMOUR STUDIO</span>
+                    <span class="logo-sub">GRAZIELE & LUCIANA BEZERRA</span>
+                </div>
+            </a>
+
+            <!-- Navegação Desktop (Apenas Início, O Salão, Dúvidas, Contato e Localização) -->
+            <nav class="nav-desktop" id="navDesktop" aria-label="Navegação Principal">
+                <a href="/" class="nav-link">Início</a>
+                <a href="/#sobre" class="nav-link">O Salão</a>
+                <a href="/#faq" class="nav-link">Dúvidas</a>
+                <a href="/#contato" class="nav-link">Contato e Localização</a>
+            </nav>
+
+            <!-- Ações do Header -->
+            <div class="header-actions">
+                <!-- Botão Carrinho de Compras -->
+                <button type="button" class="header-cart-btn" data-action="open-cart" title="Ver Sacola de Produtos" aria-label="Carrinho de Compras">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count-badge" style="display:none;">0</span>
+                </button>
+
+                <a href="/agendar" class="btn btn-primary btn-sm header-booking-btn">
+                    <span>📅</span> Agendar Horário
+                </a>
+
+                <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobileMenuDrawer">
+                    <svg class="hamburger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line class="line line-1" x1="4" y1="6" x2="20" y2="6"></line>
+                        <line class="line line-2" x1="4" y1="12" x2="20" y2="12"></line>
+                        <line class="line line-3" x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BACKDROP DO MENU MOBILE -->
+    <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" aria-hidden="true"></div>
+
+    <!-- DRAWER LATERAL DO MENU MOBILE -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menu de Navegação">
+        <div class="mobile-drawer-header">
+            <div class="mobile-drawer-brand">
+                <img src="assets/images/logo-glamour-studio.jpg" alt="Glamour Studio" class="mobile-drawer-logo">
+                <div>
+                    <span class="mobile-drawer-title">GLAMOUR STUDIO</span>
+                    <span class="mobile-drawer-subtitle">Graziele & Luciana</span>
+                </div>
+            </div>
+            <button type="button" class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Fechar menu">✕</button>
+        </div>
+
+        <div class="mobile-drawer-body">
+            <div class="mobile-drawer-status">
+                <span class="status-dot"></span>
+                <span>Atendimento de Segunda a Sábado: 10h às 18h</span>
+            </div>
+
+            <nav class="mobile-nav-list" aria-label="Links do Menu Mobile">
+                <a href="/" class="mobile-nav-item">
+                    <span class="mobile-nav-icon">🏠</span>
+                    <div class="mobile-nav-text">
+                        <span class="mobile-nav-title">Início</span>
+                        <span class="mobile-nav-desc">Página principal do salão</span>
+                    </div>
+                    <span class="mobile-nav-arrow">→</span>
+                </a>
+
+                <a href="/#sobre" class="mobile-nav-item">
+                    <span class="mobile-nav-icon">✨</span>
+                    <div class="mobile-nav-text">
+                        <span class="mobile-nav-title">O Salão</span>
+                        <span class="mobile-nav-desc">Conforto, ambiente climatizado e biossegurança</span>
+                    </div>
+                    <span class="mobile-nav-arrow">→</span>
+                </a>
+
+                <a href="/#faq" class="mobile-nav-item">
+                    <span class="mobile-nav-icon">❓</span>
+                    <div class="mobile-nav-text">
+                        <span class="mobile-nav-title">Dúvidas</span>
+                        <span class="mobile-nav-desc">Preços, horários e atendimento</span>
+                    </div>
+                    <span class="mobile-nav-arrow">→</span>
+                </a>
+
+                <a href="/#contato" class="mobile-nav-item">
+                    <span class="mobile-nav-icon">📍</span>
+                    <div class="mobile-nav-text">
+                        <span class="mobile-nav-title">Contato e Localização</span>
+                        <span class="mobile-nav-desc">Av. Tuxaua Farias, 259, Bonfim - RR</span>
+                    </div>
+                    <span class="mobile-nav-arrow">→</span>
+                </a>
+            </nav>
+
+            <div class="mobile-drawer-actions">
+                <a href="/agendar" class="btn btn-primary mobile-action-btn">
+                    <span>📅</span> Ver Procedimentos & Agendar
+                </a>
+                <button type="button" class="btn btn-secondary mobile-action-btn" onclick="window.cartApp?.openDrawer(); window.mobileMenuApp?.close();">
+                    <span>🛍️</span> Ver Sacola de Produtos
+                </button>
+            </div>
+        </div>
+        </div>
+
+        <div class="mobile-drawer-footer">
+            <span>📍 Av. Tuxaua Farias, 259, Bonfim - RR</span>
+            <span>•</span>
+            <a href="https://www.instagram.com/glamourstudio_lg/" target="_blank" rel="noopener noreferrer" style="color:var(--gold-600); text-decoration:none; font-weight:600;">@glamourstudio_lg</a>
+        </div>
+    </div>
+
+    <!-- BANNER HERO DA PÁGINA DE PRODUTOS -->
+    <section class="hero-section" style="padding: 4.5rem 0 3rem 0; min-height: auto;">
+        <div class="container">
+            <div class="hero-content" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <div class="section-tag" style="background: rgba(235, 100, 150, 0.12); border-color: rgba(235, 100, 150, 0.35); color: #D6336C; margin: 0 auto 1.2rem auto; display: inline-flex;">
+                    🌸 Boutique Oficial WePink • Pronta Entrega
+                </div>
+                <h1 class="heading-xl" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 1rem;">
+                    Perfumes, Body Splashes & Cuidados WePink
+                </h1>
+                <p class="section-subtitle" style="font-size: 1.05rem; margin-bottom: 2rem;">
+                    Produtos 100% originais com <strong>Entrega 100% Grátis</strong> em Bonfim - RR ou retirada direta no salão com <strong>Graziele Bezerra</strong>.
+                </p>
+
+                <!-- Destaques / Vantagens WePink -->
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <div style="background: var(--surface-card); border: 1px solid var(--border-gold); padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🚚</span> <strong>Frete 100% Grátis</strong>
+                    </div>
+                    <div style="background: var(--surface-card); border: 1px solid var(--border-gold); padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>✨</span> <strong>Produtos Originais WePink</strong>
+                    </div>
+                    <div style="background: var(--surface-card); border: 1px solid var(--border-gold); padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>⚡</span> <strong>Pronta Entrega Imediata</strong>
+                    </div>
+                    <div style="background: var(--surface-card); border: 1px solid var(--border-gold); padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>💬</span> <strong>Pedido Direto no WhatsApp</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VITRINE DE PRODUTOS -->
+    <section class="products-section" id="produtos" style="padding-top: 1rem;">
+        <div class="container">
+            <div class="products-grid" id="productsGrid">
+                <!-- Os produtos serão injetados dinamicamente pelo JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNER DE GARANTIA E ATENDIMENTO -->
+    <section class="booking-banner" style="margin-top: 3rem;">
+        <div class="container">
+            <div class="booking-banner-content">
+                <h2>Deseja tirar dúvidas sobre fragrâncias ou encomendar?</h2>
+                <p>Fale diretamente com Graziele Bezerra pelo WhatsApp oficial de vendas WePink e receba seu pedido em casa hoje mesmo!</p>
+                <div class="banner-buttons">
+                    <a href="https://wa.me/5595984298305?text=Ol%C3%A1%20Graziele!%20Gostaria%20de%20comprar%20produtos%20WePink." target="_blank" class="btn btn-whatsapp btn-lg">
+                        <span>💬</span> Falar com Graziele no WhatsApp (95) 98429-8305
+                    </a>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="window.cartApp?.openDrawer()">
+                        <span>🛍️</span> Abrir Sacola de Compras
+                    </button>
+                    <a href="/" class="btn btn-secondary btn-lg">
+                        <span>🏠</span> Voltar para Início
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé Principal -->
+    <footer class="footer" id="contato">
+        <div class="container footer-container">
+            <div class="footer-col brand-col">
+                <a href="/" class="logo">
+                    <img src="assets/images/logo-glamour-studio.jpg" alt="Logo Glamour Studio" class="logo-badge-img">
+                    <div class="logo-text-box">
+                        <span class="logo-main">GLAMOUR STUDIO</span>
+                        <span class="logo-sub">GRAZIELE & LUCIANA BEZERRA</span>
+                    </div>
+                </a>
+                <p class="footer-desc">
+                    Salão de beleza e boutique WePink em Bonfim - RR. Procedimentos capilares avançados, visagismo e produtos de alta performance.
+                </p>
+                <div style="margin-top:0.8rem;">
+                    <a href="https://www.instagram.com/glamourstudio_lg/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--gold-400); text-decoration:none; font-size:0.88rem; font-weight:600;">
+                        <span>📷</span> Siga @glamourstudio_lg
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title">Navegação</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/#servicos">Menu de Serviços</a></li>
+                    <li><a href="/produtos">Boutique de Produtos</a></li>
+                    <li><a href="/agendar">Agendamento Online</a></li>
+                    <li><a href="/#sobre">Sobre o Salão</a></li>
+                    <li><a href="/#faq">Dúvidas Frequentes</a></li>
+                    <li><a href="/#contato">Localização & Contato</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title">Vendas WePink</h4>
+                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.8rem;">
+                    🛍️ Responsável: Graziele Bezerra<br>
+                    📱 WhatsApp: (95) 98429-8305<br>
+                    🚚 Entrega Grátis em Bonfim - RR
+                </p>
+                <a href="https://wa.me/5595984298305?text=Ol%C3%A1%20Graziele!%20Gostaria%20de%20comprar%20produtos%20WePink." target="_blank" class="btn btn-whatsapp btn-sm">
+                    Chamar no WhatsApp 💬
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-content">
+                <p>&copy; 2026 Glamour Studio • Graziele Bezerra & Luciana Bezerra. Todos os direitos reservados.</p>
+                <div class="footer-status-pill" id="salonStatusFooter">
+                    <span class="status-dot"></span>
+                    <span>Carregando status...</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+    <a href="https://wa.me/5595984298305?text=Ol%C3%A1%20Graziele!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20produtos%20WePink." 
+       class="floating-whatsapp" 
+       target="_blank" 
+       rel="noopener" 
+       title="Fale Conosco no WhatsApp"
+       aria-label="Atendimento via WhatsApp">
+        <svg class="whatsapp-icon-svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+            <path d="M12.031 2C6.496 2 2 6.496 2 12.031c0 1.838.5 3.633 1.453 5.211L2 22l4.906-1.422a10.02 10.02 0 0 0 5.125 1.453h.004c5.535 0 10.031-4.496 10.031-10.031C22.066 6.496 17.566 2 12.031 2zm0 18.344a8.315 8.315 0 0 1-4.242-1.156l-.305-.18-3.152.914.922-3.078-.2-.316A8.307 8.307 0 0 1 3.719 12.03c0-4.586 3.727-8.312 8.313-8.312 4.586 0 8.312 3.726 8.312 8.312 0 4.586-3.726 8.313-8.313 8.313zm4.551-6.223c-.25-.125-1.477-.73-1.707-.812-.23-.082-.398-.125-.566.125-.168.25-.652.812-.8 1-.148.188-.297.207-.547.082-.25-.125-1.055-.387-2.012-1.238-.742-.664-1.242-1.484-1.39-1.734-.145-.25-.016-.387.109-.512.113-.113.25-.293.375-.438.125-.148.168-.25.25-.418.082-.168.043-.316-.02-.441-.063-.125-.566-1.363-.777-1.867-.203-.492-.414-.422-.566-.43-.145-.008-.313-.008-.48-.008-.168 0-.441.063-.672.313-.23.25-.883.863-.883 2.105 0 1.242.906 2.441 1.031 2.61.125.168 1.785 2.726 4.324 3.824.605.262 1.078.418 1.449.535.61.195 1.164.168 1.602.102.488-.074 1.477-.605 1.684-1.191.207-.586.207-1.09.145-1.192-.063-.102-.23-.168-.48-.293z"/>
+        </svg>
+    </a>
+
+    <!-- GAVETA LATERAL DO CARRINHO DE COMPRAS (CART DRAWER) -->
+    <div class="cart-drawer-backdrop" id="cartDrawerBackdrop">
+        <div class="cart-drawer" id="cartDrawer">
+            <div class="cart-drawer-header">
+                <h3 class="cart-drawer-title">
+                    <span>🛍️</span> Sua Sacola de Produtos
+                </h3>
+                <button type="button" class="modal-close-btn" id="closeCartDrawer" aria-label="Fechar Sacola">✕</button>
+            </div>
+
+            <div class="cart-drawer-body">
+                <div class="cart-empty-state" id="cartEmptyState">
+                    <div class="cart-empty-icon">🛒</div>
+                    <h4 style="font-family:var(--font-heading); font-size:1.2rem; margin-bottom:0.4rem;">Sua sacola está vazia</h4>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem;">Explore nossos produtos profissionais e cuide dos seus fios em casa.</p>
+                    <a href="/produtos" class="btn btn-primary btn-sm" onclick="window.cartApp?.closeDrawer()">
+                        Explorar Produtos
+                    </a>
+                </div>
+
+                <div class="cart-items-list" id="cartItemsList" style="display:none;">
+                    <!-- Gerado dinamicamente pelo cart.js -->
+                </div>
+            </div>
+
+            <div class="cart-drawer-footer" id="cartDrawerFooter" style="display:none;">
+                <div class="cart-delivery-box">
+                    <label class="form-label" for="cartDeliveryOption">Forma de Recebimento:</label>
+                    <select id="cartDeliveryOption" class="form-control" style="font-size:0.88rem; padding:0.6rem 0.8rem;">
+                        <option value="entrega">🚚 Entrega via Delivery / Motoboy (Entrega Grátis • Sem Taxa! 🎉)</option>
+                        <option value="retirada">🏬 Retirada no Salão (Av. Tuxaua Farias, 259, Bonfim - RR)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                    <input type="text" id="cartOrderNotes" class="form-control" style="font-size:0.85rem; padding:0.6rem 0.8rem;" placeholder="Observação ou endereço de entrega (opcional)">
+                </div>
+
+                <div class="cart-total-row">
+                    <span>Total:</span>
+                    <span id="cartTotal" style="color:var(--gold-600); font-size:1.35rem;">R$ 0,00</span>
+                </div>
+
+                <button type="button" class="btn btn-whatsapp" id="cartCheckoutBtn" style="width:100%; font-size:1rem; padding:0.95rem;">
+                    <span>💬</span> Finalizar Pedido pelo WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE AGENDAMENTO INTERATIVO -->
+    <div class="modal-backdrop" id="bookingModal">
+        <div class="booking-modal">
+            <div class="modal-header">
+                <div>
+                    <h3 style="font-family:var(--font-heading); font-size:1.3rem; margin:0;">Agendamento Online</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">Glamour Studio • Graziele & Luciana</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="closeBookingModal" aria-label="Fechar">✕</button>
+            </div>
+
+            <div class="modal-progress">
+                <div class="step-indicator active"></div>
+                <div class="step-indicator"></div>
+                <div class="step-indicator"></div>
+                <div class="step-indicator"></div>
+            </div>
+
+            <div class="modal-body">
+                <!-- ETAPA 1: Seleção de Serviços -->
+                <div class="step-container active" id="step1">
+                    <h4 class="step-title">1. Escolha o(s) Procedimento(s)</h4>
+                    <p class="step-subtitle">Você pode selecionar um ou mais procedimentos para o mesmo atendimento.</p>
+                    
+                    <!-- Alerta de serviço selecionado -->
+                    <div id="modalSelectedAlert" class="modal-selected-alert" style="display:none;"></div>
+
+                    <!-- Combos e sugestões rápidas -->
+                    <div class="modal-quick-combos">
+                        <div class="modal-quick-combos-title">
+                            <span>💡</span> Sugestões para combinar no seu atendimento:
+                        </div>
+                        <div class="modal-combos-chips">
+                            <button type="button" class="combo-chip-btn" data-id="manicure-mao" onclick="window.bookingApp?.toggleService('manicure-mao')">💅 + Manicure (R$ 30)</button>
+                            <button type="button" class="combo-chip-btn" data-id="designer-personalizado" onclick="window.bookingApp?.toggleService('designer-personalizado')">👁️ + Sobrancelha (R$ 20)</button>
+                            <button type="button" class="combo-chip-btn" data-id="depilacao-axilas" onclick="window.bookingApp?.toggleService('depilacao-axilas')">🌸 + Depilação Axilas (R$ 25)</button>
+                            <button type="button" class="combo-chip-btn" data-id="hidratacao-escova" onclick="window.bookingApp?.toggleService('hidratacao-escova')">💇‍♀️ + Hidratação + Escova (R$ 120)</button>
+                        </div>
+                    </div>
+
+                    <div class="modal-services-select" id="modalServicesList"></div>
+                </div>
+
+                <!-- ETAPA 2: Profissional, Data & Horário -->
+                <div class="step-container" id="step2">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:gap:0.5rem; margin-bottom:0.4rem;">
+                        <h4 class="step-title" style="margin:0;">2. Especialista, Data & Horário</h4>
+                        <button type="button" class="btn-change-services" onclick="window.bookingApp?.goToStep(1)">
+                            ✏️ + Adicionar/trocar procedimentos
+                        </button>
+                    </div>
+                    <p class="step-subtitle">Escolha sua especialista de preferência e o horário que você deseja.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Especialista Desejada:</label>
+                        <div class="modal-professionals-grid" id="modalProfessionalsList"></div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:1.5rem;">
+                        <label class="form-label" for="bookingDate">Data Preferencial:</label>
+                        <input type="date" id="bookingDate" class="form-control">
+                    </div>
+
+                    <div class="form-group custom-time-wrapper">
+                        <label class="form-label" for="bookingCustomTime">🕒 Horário que você deseja:</label>
+                        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.5rem;">
+                            Defina o horário de sua preferência ou clique em uma das opções sugeridas:
+                        </p>
+                        <div class="custom-time-row">
+                            <input type="time" id="bookingCustomTime" class="custom-time-input" value="10:00">
+                            <span style="font-size:0.85rem; color:var(--text-muted);">Horário escolhido</span>
+                        </div>
+                        <div id="bookingTimeSlots"></div>
+                    </div>
+                </div>
+
+                <!-- ETAPA 3: Dados de Identificação -->
+                <div class="step-container" id="step3">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.4rem;">
+                        <h4 class="step-title" style="margin:0;">3. Identificação do Agendamento</h4>
+                        <button type="button" class="btn-change-services" onclick="window.bookingApp?.goToStep(1)">
+                            ✏️ Alterar procedimentos
+                        </button>
+                    </div>
+                    <p class="step-subtitle">Informe seu nome e preferências para o atendimento.</p>
+
+                    <div class="form-group">
+                        <label class="form-label" for="clientName">Seu Nome Completo *</label>
+                        <input type="text" id="clientName" class="form-control" placeholder="Digite como prefere ser chamada(o)...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="clientNotes">Observações ou Necessidades Especiais (opcional)</label>
+                        <textarea id="clientNotes" class="form-control" rows="3" placeholder="Ex: Cabelo com química, teste de mecha, preferência de café..."></textarea>
+                    </div>
+                </div>
+
+                <!-- ETAPA 4: Resumo & Confirmação -->
+                <div class="step-container" id="step4">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.4rem;">
+                        <h4 class="step-title" style="margin:0;">4. Resumo do Agendamento</h4>
+                        <button type="button" class="btn-change-services" onclick="window.bookingApp?.goToStep(1)">
+                            ✏️ + Adicionar/trocar serviços
+                        </button>
+                    </div>
+                    <p class="step-subtitle">Revise os detalhes abaixo antes de confirmar pelo WhatsApp.</p>
+
+                    <div class="booking-summary-card">
+                        <div class="summary-row">
+                            <span>Procedimentos:</span>
+                            <div id="summaryServices" style="text-align:right; font-weight:600;"></div>
+                        </div>
+                        <div class="summary-row">
+                            <span>Especialista:</span>
+                            <strong id="summaryProfessional"></strong>
+                        </div>
+                        <div class="summary-row">
+                            <span>Data e Hora:</span>
+                            <strong id="summaryDateTime"></strong>
+                        </div>
+                        <div class="summary-row">
+                            <span>Duração Estimada:</span>
+                            <span id="summaryDuration"></span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Investimento Total Estimado:</span>
+                            <span id="summaryTotalPrice" style="color:var(--gold-600);"></span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:1.2rem; font-size:0.82rem; color:var(--text-muted); text-align:center;">
+                        🔒 Seus dados estão protegidos. Ao clicar em confirmar, uma mensagem formatada será aberta no WhatsApp da profissional para confirmação instantânea.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" id="modalPrevBtn" style="display:none;">
+                    ← Voltar
+                </button>
+                <div></div>
+                <button type="button" class="btn btn-primary btn-sm" id="modalNextBtn">
+                    Avançar →
+                </button>
+                <button type="button" class="btn btn-whatsapp btn-sm" id="modalSubmitBtn" style="display:none;">
+                    Confirmar no WhatsApp 💬
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts & SPA/MPA Router -->
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

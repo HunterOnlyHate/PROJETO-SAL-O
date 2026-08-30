@@ -1,6 +1,13 @@
 {
   "version": 2,
-  "name": "salao-studio-lumina",
+  "name": "glamour-studio-salao",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/produtos", "destination": "/produtos.html" },
+    { "source": "/agendar", "destination": "/agendar.html" },
+    { "source": "/", "destination": "/index.html" }
+  ]
 }

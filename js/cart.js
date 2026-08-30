@@ -1,5 +1,5 @@
 /**
- * STUDIO LUMINA - SISTEMA DE CARRINHO DE COMPRAS & PRODUTOS HOME CARE
+ * GLAMOUR STUDIO - SISTEMA DE CARRINHO DE COMPRAS & PRODUTOS HOME CARE
  * Gerenciamento de sacola, persistência em localStorage e checkout via WhatsApp.
  */
 
@@ -7,7 +7,7 @@ class ShoppingCart {
     constructor() {
         this.items = [];
         this.deliveryType = 'retirada'; // 'retirada' ou 'entrega'
-        this.storageKey = 'studio_lumina_cart_v1';
+        this.storageKey = 'glamour_studio_cart_v1';
 
         this.loadCart();
         this.initElements();

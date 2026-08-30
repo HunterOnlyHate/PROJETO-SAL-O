@@ -10,10 +10,10 @@ class BookingSystem {
         this.selectedServices = [];
         this.selectedProfessional = null;
         this.selectedDate = '';
-        this.selectedTime = '';
+        this.selectedTime = '10:00';
+        this.modalSearchQuery = '';
         this.clientData = {
             name: '',
-            phone: '',
             notes: ''
         };
 
@@ -35,6 +35,7 @@ class BookingSystem {
         this.servicesListEl = document.getElementById('modalServicesList');
         this.professionalsListEl = document.getElementById('modalProfessionalsList');
         this.dateInput = document.getElementById('bookingDate');
+        this.customTimeInput = document.getElementById('bookingCustomTime');
         this.timeSlotsEl = document.getElementById('bookingTimeSlots');
         
         this.summaryServicesEl = document.getElementById('summaryServices');
@@ -74,25 +75,9 @@ class BookingSystem {
 
         // Eventos de inputs do cliente
         const nameInput = document.getElementById('clientName');
-        const phoneInput = document.getElementById('clientPhone');
         const notesInput = document.getElementById('clientNotes');
 
         if (nameInput) nameInput.addEventListener('input', (e) => this.clientData.name = e.target.value);
-        if (phoneInput) {
-            phoneInput.addEventListener('input', (e) => {
-                let v = e.target.value.replace(/\D/g, '');
-                if (v.length > 11) v = v.substring(0, 11);
-                if (v.length > 10) {
-                    v = v.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-                } else if (v.length > 5) {
-                    v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-                } else if (v.length > 2) {
-                    v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-                }
-                e.target.value = v;
-                this.clientData.phone = v;
-            });
-        }
         if (notesInput) notesInput.addEventListener('input', (e) => this.clientData.notes = e.target.value);
 
         // Data mínima para hoje
@@ -104,7 +89,19 @@ class BookingSystem {
 
             this.dateInput.addEventListener('change', (e) => {
                 this.selectedDate = e.target.value;
-                this.updateTimeSlots();
+                this.updateSummary();
+            });
+        }
+
+        // Horário customizado
+        if (this.customTimeInput) {
+            this.customTimeInput.value = this.selectedTime;
+            this.customTimeInput.addEventListener('input', (e) => {
+                if (e.target.value) {
+                    this.selectedTime = e.target.value;
+                    this.highlightActiveTimeSlot();
+                    this.updateSummary();
+                }
             });
         }
     }
@@ -113,6 +110,18 @@ class BookingSystem {
         if (!this.servicesListEl || !this.professionalsListEl) return;
 
         // Renderizar Serviços no Modal
+        this.renderServicesList();
+
+        // Renderizar Especialistas de acordo com os procedimentos
+        this.updateProfessionalsUI();
+
+        // Renderizar Horários
+        this.updateTimeSlots();
+    }
+
+    renderServicesList() {
+        if (!this.servicesListEl) return;
+
         this.servicesListEl.innerHTML = salonData.services.map(s => {
             let priceText = '';
             if (s.priceDisplay) {
@@ -123,16 +132,28 @@ class BookingSystem {
                 priceText = `<span style="font-size:0.85rem; color:var(--gold-600); font-weight:600;">Sob Consulta</span>`;
             }
 
+            const proIcon = s.professionalId === 'luciana-bezerra' ? '💇‍♀️' : '🌸';
+            const proName = s.professionalName || (s.professionalId === 'luciana-bezerra' ? 'Luciana Bezerra' : 'Graziele Bezerra');
+            const isSelected = this.selectedServices.includes(s.id);
+
             return `
-            <div class="modal-service-option" data-id="${s.id}">
-                <div>
-                    <strong style="display:block; color:var(--text-primary); font-size:0.95rem;">${s.name}</strong>
+            <div class="modal-service-option ${isSelected ? 'selected' : ''}" data-id="${s.id}" data-pro="${s.professionalId || ''}">
+                <div style="flex:1; padding-right:0.8rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.2rem;">
+                        <strong style="color:var(--text-primary); font-size:0.95rem;">${s.name}</strong>
+                        <span style="font-size:0.72rem; font-weight:600; background:var(--gold-100); color:var(--gold-700); padding:0.15rem 0.5rem; border-radius:999px; border:1px solid var(--gold-300);">
+                            ${proIcon} ${proName}
+                        </span>
+                    </div>
                     <span style="font-size:0.8rem; color:var(--text-muted);">⏱️ ${s.duration}</span>
                 </div>
                 <div style="text-align:right;">
                     <div style="font-weight:700; color:var(--gold-600); font-family:var(--font-heading); font-size:1.05rem;">
                         ${priceText}
                     </div>
+                    <span style="font-size:0.75rem; color:${isSelected ? 'var(--gold-700)' : 'var(--text-muted)'}; font-weight:600;">
+                        ${isSelected ? '✓ Selecionado' : '+ Adicionar'}
+                    </span>
                 </div>
             </div>
         `}).join('');
@@ -142,47 +163,173 @@ class BookingSystem {
             el.addEventListener('click', () => {
                 const id = el.dataset.id;
                 this.toggleService(id);
-                el.classList.toggle('selected', this.selectedServices.includes(id));
-                this.updateSummary();
             });
         });
+    }
 
-        // Renderizar Profissionais no Modal
-        let proHtml = `
+    updateProfessionalsUI() {
+        if (!this.professionalsListEl) return;
+
+        const selectedObjs = salonData.services.filter(s => this.selectedServices.includes(s.id));
+        const lucianaServices = selectedObjs.filter(s => s.professionalId === 'luciana-bezerra');
+        const grazieleServices = selectedObjs.filter(s => s.professionalId === 'graziele-bezerra');
+
+        const hasLuciana = lucianaServices.length > 0;
+        const hasGraziele = grazieleServices.length > 0;
+
+        // Caso 1: Procedimentos selecionados de AMBAS as especialistas (Atendimento Conjunto)
+        if (hasLuciana && hasGraziele) {
+            this.selectedProfessional = 'combo-both';
+            this.professionalsListEl.innerHTML = `
+                <div class="modal-dual-pro-container" style="grid-column: 1 / -1;">
+                    <div class="modal-dual-pro-header">
+                        <span>✨</span> Atendimento Especializado em Conjunto
+                    </div>
+                    <div class="modal-dual-pro-list">
+                        <div class="dual-pro-card">
+                            <div class="modal-pro-badge">LB</div>
+                            <div>
+                                <strong>Luciana Bezerra</strong>
+                                <span class="dual-services-text">✂️ Cabelos & Unhas: <strong>${lucianaServices.map(s => s.name).join(', ')}</strong></span>
+                            </div>
+                        </div>
+                        <div class="dual-pro-card">
+                            <div class="modal-pro-badge">GB</div>
+                            <div>
+                                <strong>Graziele Bezerra</strong>
+                                <span class="dual-services-text">🌸 Sobrancelhas & Depilação: <strong>${grazieleServices.map(s => s.name).join(', ')}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.75rem; text-align:center;">
+                        🔒 Cada procedimento será realizado com exclusividade pela sua respectiva especialista técnica.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Caso 2: Apenas serviços da Luciana (Cabelos, Alisamentos, Escovas, Manicure, Pedicure)
+        if (hasLuciana && !hasGraziele) {
+            this.selectedProfessional = 'luciana-bezerra';
+            this.professionalsListEl.innerHTML = `
+                <div class="modal-pro-option selected" data-id="luciana-bezerra" style="grid-column: 1 / -1;">
+                    <div class="modal-pro-badge">LB</div>
+                    <div class="modal-pro-text">
+                        <span class="modal-pro-name">Luciana Bezerra</span>
+                        <span class="modal-pro-role">Master Hair Stylist & Visagista (Cabelos, Alisamentos & Unhas)</span>
+                        <span class="modal-pro-badge-tag tag-success">✓ Especialista exclusiva designada para seus procedimentos</span>
+                    </div>
+                </div>
+                <div class="modal-pro-option disabled" data-id="graziele-bezerra">
+                    <div class="modal-pro-badge">GB</div>
+                    <div class="modal-pro-text">
+                        <span class="modal-pro-name">Graziele Bezerra</span>
+                        <span class="modal-pro-role">Sobrancelhas, Depilação & WePink</span>
+                        <span class="modal-pro-badge-tag tag-disabled">🔒 Especialista exclusiva em Sobrancelhas e Depilação</span>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Caso 3: Apenas serviços da Graziele (Sobrancelhas, Henna, Depilações)
+        if (!hasLuciana && hasGraziele) {
+            this.selectedProfessional = 'graziele-bezerra';
+            this.professionalsListEl.innerHTML = `
+                <div class="modal-pro-option selected" data-id="graziele-bezerra" style="grid-column: 1 / -1;">
+                    <div class="modal-pro-badge">GB</div>
+                    <div class="modal-pro-text">
+                        <span class="modal-pro-name">Graziele Bezerra</span>
+                        <span class="modal-pro-role">Designer de Sobrancelhas & Depilação Suave</span>
+                        <span class="modal-pro-badge-tag tag-success">✓ Especialista exclusiva designada para seus procedimentos</span>
+                    </div>
+                </div>
+                <div class="modal-pro-option disabled" data-id="luciana-bezerra">
+                    <div class="modal-pro-badge">LB</div>
+                    <div class="modal-pro-text">
+                        <span class="modal-pro-name">Luciana Bezerra</span>
+                        <span class="modal-pro-role">Cabelos, Alisamentos & Unhas</span>
+                        <span class="modal-pro-badge-tag tag-disabled">🔒 Especialista exclusiva em Cabelos e Unhas</span>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Caso 4: Nenhum serviço selecionado ainda
+        this.selectedProfessional = 'any';
+        this.professionalsListEl.innerHTML = `
             <div class="modal-pro-option selected" data-id="any">
-                <div class="card-icon-circle" style="width:40px; height:40px; font-size:1.1rem;">⭐</div>
-                <div>
-                    <strong style="display:block; font-size:0.9rem;">Sem preferência</strong>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">Primeira especialista disponível</span>
+                <div class="modal-pro-badge star-badge">⭐</div>
+                <div class="modal-pro-text">
+                    <span class="modal-pro-name">Automático por Especialidade</span>
+                    <span class="modal-pro-role">Designada conforme a categoria do procedimento</span>
+                </div>
+            </div>
+            <div class="modal-pro-option" data-id="luciana-bezerra">
+                <div class="modal-pro-badge">LB</div>
+                <div class="modal-pro-text">
+                    <span class="modal-pro-name">Luciana Bezerra</span>
+                    <span class="modal-pro-role">Cabelos, Alisamentos & Unhas</span>
+                </div>
+            </div>
+            <div class="modal-pro-option" data-id="graziele-bezerra">
+                <div class="modal-pro-badge">GB</div>
+                <div class="modal-pro-text">
+                    <span class="modal-pro-name">Graziele Bezerra</span>
+                    <span class="modal-pro-role">Sobrancelhas & Depilação</span>
                 </div>
             </div>
         `;
 
-        proHtml += salonData.professionals.map(p => {
-            const initials = p.name.split(' ').map(n => n[0]).join('').substring(0, 2);
-            return `
-            <div class="modal-pro-option" data-id="${p.id}">
-                <div class="card-icon-circle" style="width:40px; height:40px; font-size:0.88rem; font-weight:700; background:var(--gold-100); color:var(--gold-700); border:1px solid var(--gold-300);">${initials}</div>
-                <div>
-                    <strong style="display:block; font-size:0.9rem;">${p.name}</strong>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">${p.role}</span>
-                </div>
-            </div>
-        `}).join('');
-
-        this.professionalsListEl.innerHTML = proHtml;
-        this.selectedProfessional = 'any';
-
-        this.professionalsListEl.querySelectorAll('.modal-pro-option').forEach(el => {
+        this.professionalsListEl.querySelectorAll('.modal-pro-option:not(.disabled)').forEach(el => {
             el.addEventListener('click', () => {
-                this.professionalsListEl.querySelectorAll('.modal-pro-option').forEach(item => item.classList.remove('selected'));
-                el.classList.add('selected');
-                this.selectedProfessional = el.dataset.id;
-                this.updateSummary();
+                this.selectProfessional(el.dataset.id);
             });
         });
+    }
 
-        this.updateTimeSlots();
+    updateCombosUI() {
+        const alertEl = document.getElementById('modalSelectedAlert');
+        const countBadge = document.getElementById('selectedServicesCount');
+        
+        if (countBadge) {
+            countBadge.innerText = `${this.selectedServices.length} selecionado(s)`;
+        }
+
+        if (alertEl) {
+            if (this.selectedServices.length > 0) {
+                const selectedNames = salonData.services
+                    .filter(s => this.selectedServices.includes(s.id))
+                    .map(s => s.name)
+                    .join(', ');
+                alertEl.style.display = 'flex';
+                alertEl.innerHTML = `
+                    <div class="modal-selected-alert-text">
+                        ✨ <strong>${this.selectedServices.length} serviço(s) no agendamento:</strong> ${selectedNames}
+                    </div>
+                `;
+            } else {
+                alertEl.style.display = 'none';
+            }
+        }
+
+        // Atualizar chips rápidos
+        document.querySelectorAll('.combo-chip-btn').forEach(chip => {
+            const serviceId = chip.dataset.id;
+            chip.classList.toggle('selected', this.selectedServices.includes(serviceId));
+        });
+    }
+
+    selectProfessional(proId) {
+        this.selectedProfessional = proId || 'any';
+        if (this.professionalsListEl) {
+            this.professionalsListEl.querySelectorAll('.modal-pro-option:not(.disabled)').forEach(item => {
+                item.classList.toggle('selected', item.dataset.id === this.selectedProfessional);
+            });
+        }
+        this.updateSummary();
     }
 
     updateTimeSlots() {
@@ -202,20 +349,32 @@ class BookingSystem {
 
         this.timeSlotsEl.querySelectorAll('.time-slot-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                this.timeSlotsEl.querySelectorAll('.time-slot-btn').forEach(b => {
-                    b.style.background = 'var(--bg-surface)';
-                    b.style.color = 'var(--text-primary)';
-                });
-                btn.style.background = 'var(--gold-500)';
-                btn.style.color = '#fff';
-                this.selectedTime = btn.innerText.trim();
-                this.updateSummary();
+                const timeVal = btn.innerText.trim();
+                this.setTime(timeVal);
             });
         });
 
         if (!this.selectedTime) {
-            this.selectedTime = slots[0];
+            this.setTime(slots[0]);
         }
+    }
+
+    setTime(timeVal) {
+        this.selectedTime = timeVal;
+        if (this.customTimeInput) {
+            this.customTimeInput.value = timeVal;
+        }
+        this.highlightActiveTimeSlot();
+        this.updateSummary();
+    }
+
+    highlightActiveTimeSlot() {
+        if (!this.timeSlotsEl) return;
+        this.timeSlotsEl.querySelectorAll('.time-slot-btn').forEach(btn => {
+            const isMatch = btn.innerText.trim() === this.selectedTime;
+            btn.style.background = isMatch ? 'var(--gold-500)' : 'var(--bg-surface)';
+            btn.style.color = isMatch ? '#fff' : 'var(--text-primary)';
+        });
     }
 
     toggleService(serviceId) {
@@ -225,18 +384,29 @@ class BookingSystem {
         } else {
             this.selectedServices.push(serviceId);
         }
+        this.renderServicesList();
+        this.updateCombosUI();
+        this.updateProfessionalsUI();
+        this.updateSummary();
+    }
+
+    goToStep(stepNumber) {
+        if (stepNumber >= 1 && stepNumber <= this.totalSteps) {
+            this.currentStep = stepNumber;
+            this.updateStepView();
+        }
     }
 
     open(preselectedServiceId = null) {
         if (preselectedServiceId) {
-            this.selectedServices = [preselectedServiceId];
-            if (this.servicesListEl) {
-                this.servicesListEl.querySelectorAll('.modal-service-option').forEach(el => {
-                    el.classList.toggle('selected', el.dataset.id === preselectedServiceId);
-                });
+            if (!this.selectedServices.includes(preselectedServiceId)) {
+                this.selectedServices = [preselectedServiceId];
             }
         }
         
+        this.renderServicesList();
+        this.updateCombosUI();
+        this.updateProfessionalsUI();
         this.currentStep = 1;
         this.updateStepView();
         this.updateSummary();
@@ -257,21 +427,17 @@ class BookingSystem {
     nextStep() {
         if (this.currentStep === 1) {
             if (this.selectedServices.length === 0) {
-                window.showToast?.('Selecione ao menos um procedimento.');
+                window.showToast?.('Por favor, selecione ao menos um procedimento.');
                 return;
             }
         } else if (this.currentStep === 2) {
             if (!this.selectedDate || !this.selectedTime) {
-                window.showToast?.('Selecione uma data e horário.');
+                window.showToast?.('Selecione uma data e o horário que você deseja.');
                 return;
             }
         } else if (this.currentStep === 3) {
-            if (!this.clientData.name || this.clientData.name.trim().length < 3) {
+            if (!this.clientData.name || this.clientData.name.trim().length < 2) {
                 window.showToast?.('Por favor, informe seu nome completo.');
-                return;
-            }
-            if (!this.clientData.phone || this.clientData.phone.replace(/\D/g, '').length < 10) {
-                window.showToast?.('Por favor, informe um WhatsApp válido.');
                 return;
             }
         }
@@ -312,6 +478,7 @@ class BookingSystem {
             }
         }
 
+        this.updateProfessionalsUI();
         this.updateSummary();
     }
 
@@ -319,6 +486,10 @@ class BookingSystem {
         const services = salonData.services.filter(s => this.selectedServices.includes(s.id));
         const totalPrice = services.reduce((acc, curr) => acc + curr.price, 0);
         const totalMinutes = services.reduce((acc, curr) => acc + curr.durationMinutes, 0);
+
+        // Separar especialistas dos serviços
+        const lucianaServices = services.filter(s => s.professionalId === 'luciana-bezerra');
+        const grazieleServices = services.filter(s => s.professionalId === 'graziele-bezerra');
 
         // Formatar tempo total
         const hours = Math.floor(totalMinutes / 60);
@@ -328,11 +499,16 @@ class BookingSystem {
         if (mins > 0) durationFormatted += `${mins}min`;
         if (!durationFormatted) durationFormatted = '0min';
 
-        // Profissional selecionada
-        let proName = 'Sem preferência (Primeira disponível)';
-        if (this.selectedProfessional && this.selectedProfessional !== 'any') {
-            const pro = salonData.professionals.find(p => p.id === this.selectedProfessional);
-            if (pro) proName = pro.name;
+        // Profissional designada
+        let proDisplayName = '';
+        if (lucianaServices.length > 0 && grazieleServices.length > 0) {
+            proDisplayName = 'Luciana Bezerra (Cabelos/Unhas) & Graziele Bezerra (Sobrancelhas/Depilação)';
+        } else if (grazieleServices.length > 0) {
+            proDisplayName = 'Graziele Bezerra (Designer de Sobrancelhas & Depilação)';
+        } else if (lucianaServices.length > 0) {
+            proDisplayName = 'Luciana Bezerra (Master Hair Stylist & Unhas)';
+        } else {
+            proDisplayName = 'Conforme Especialidade';
         }
 
         // Data formatada
@@ -351,12 +527,19 @@ class BookingSystem {
         }
 
         if (this.summaryServicesEl) {
-            this.summaryServicesEl.innerHTML = services.length > 0 
-                ? services.map(s => `<div>• ${s.name} ${s.price > 0 ? `(R$ ${s.price.toFixed(2).replace('.', ',')})` : '(Sob consulta)'}</div>`).join('')
-                : '<em>Nenhum serviço selecionado</em>';
+            if (lucianaServices.length > 0 && grazieleServices.length > 0) {
+                this.summaryServicesEl.innerHTML = `
+                    <div style="margin-bottom:0.4rem;"><strong>💇‍♀️ Luciana:</strong> ${lucianaServices.map(s => s.name).join(', ')}</div>
+                    <div><strong>🌸 Graziele:</strong> ${grazieleServices.map(s => s.name).join(', ')}</div>
+                `;
+            } else {
+                this.summaryServicesEl.innerHTML = services.length > 0 
+                    ? services.map(s => `<div>• ${s.name} ${s.price > 0 ? `(R$ ${s.price.toFixed(2).replace('.', ',')})` : '(Sob consulta)'}</div>`).join('')
+                    : '<em>Nenhum serviço selecionado</em>';
+            }
         }
 
-        if (this.summaryProEl) this.summaryProEl.innerText = proName;
+        if (this.summaryProEl) this.summaryProEl.innerText = proDisplayName;
         if (this.summaryDateTimeEl) this.summaryDateTimeEl.innerText = `${dateFormatted} às ${this.selectedTime || '--:--'}`;
         if (this.summaryDurationEl) this.summaryDurationEl.innerText = durationFormatted;
         if (this.summaryTotalPriceEl) this.summaryTotalPriceEl.innerText = priceDisplay;
@@ -367,15 +550,21 @@ class BookingSystem {
         const totalPrice = services.reduce((acc, curr) => acc + curr.price, 0);
         const hasCustomPrice = services.some(s => s.price === 0);
         
-        let proName = 'Sem preferência (Primeira disponível)';
-        let targetWhatsapp = salonData.info.whatsapp;
+        const lucianaServices = services.filter(s => s.professionalId === 'luciana-bezerra');
+        const grazieleServices = services.filter(s => s.professionalId === 'graziele-bezerra');
 
-        if (this.selectedProfessional && this.selectedProfessional !== 'any') {
-            const pro = salonData.professionals.find(p => p.id === this.selectedProfessional);
-            if (pro) {
-                proName = `${pro.name} (${pro.role})`;
-                if (pro.whatsapp) targetWhatsapp = pro.whatsapp;
-            }
+        let proDisplayName = '';
+        let targetWhatsapp = salonData.info.whatsapp || '5595984072160';
+
+        if (lucianaServices.length > 0 && grazieleServices.length > 0) {
+            proDisplayName = 'Luciana Bezerra (Cabelos/Unhas) & Graziele Bezerra (Sobrancelhas/Depilação)';
+            targetWhatsapp = salonData.info.whatsapp; // Luciana coordena
+        } else if (grazieleServices.length > 0) {
+            proDisplayName = 'Graziele Bezerra (Designer de Sobrancelhas & Depilação)';
+            targetWhatsapp = salonData.info.whatsappVendas || '5595984298305';
+        } else {
+            proDisplayName = 'Luciana Bezerra (Master Hair Stylist & Visagista)';
+            targetWhatsapp = salonData.info.whatsapp || '5595984072160';
         }
 
         const [y, m, d] = this.selectedDate.split('-');
@@ -385,20 +574,33 @@ class BookingSystem {
             ? (hasCustomPrice ? `R$ ${totalPrice.toFixed(2).replace('.', ',')} (+ itens sob consulta)` : `R$ ${totalPrice.toFixed(2).replace('.', ',')}`)
             : 'A consultar no WhatsApp';
 
+        // Montar lista de serviços na mensagem
+        let servicesSection = '';
+        if (lucianaServices.length > 0 && grazieleServices.length > 0) {
+            servicesSection = 
+`💇‍♀️ *Procedimentos Luciana Bezerra (Cabelos & Unhas):*
+${lucianaServices.map(s => `  • ${s.name} - ${s.price > 0 ? `R$ ${s.price.toFixed(2).replace('.', ',')}` : 'Sob consulta'}`).join('\n')}
+
+🌸 *Procedimentos Graziele Bezerra (Sobrancelhas & Depilação):*
+${grazieleServices.map(s => `  • ${s.name} - ${s.price > 0 ? `R$ ${s.price.toFixed(2).replace('.', ',')}` : 'Sob consulta'}`).join('\n')}`;
+        } else {
+            servicesSection = 
+`✂️ *Procedimento(s):*
+${services.map(s => `• ${s.name} - ${s.price > 0 ? `R$ ${s.price.toFixed(2).replace('.', ',')}` : 'Consultar no WhatsApp'}`).join('\n')}`;
+        }
+
         // Montar mensagem para o WhatsApp
         const message = 
 `✨ *SOLICITAÇÃO DE AGENDAMENTO - GLAMOUR STUDIO* ✨
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 👤 *Cliente:* ${this.clientData.name}
-📱 *WhatsApp:* ${this.clientData.phone}
 
-✂️ *Procedimento(s):*
-${services.map(s => `• ${s.name} - ${s.price > 0 ? `R$ ${s.price.toFixed(2).replace('.', ',')}` : 'Consultar no WhatsApp'}`).join('\n')}
+${servicesSection}
 
 💰 *Valor Estimado:* ${totalFormatted}
-💇‍♀️ *Profissional:* ${proName}
+👩‍🦰 *Especialista(s):* ${proDisplayName}
 📅 *Data:* ${dateFormatted}
-🕒 *Horário:* ${this.selectedTime}
+🕒 *Horário Desejado:* ${this.selectedTime}
 ${this.clientData.notes ? `📝 *Observações:* ${this.clientData.notes}\n` : ''}━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 _Av. Tuxaua Farias, 259, Bonfim - RR, 69380-000 - Glamour Studio_`;
 
@@ -420,3 +622,4 @@ document.addEventListener('DOMContentLoaded', () => {
     bookingApp = new BookingSystem();
     window.bookingApp = bookingApp;
 });
+

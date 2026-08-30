@@ -8,8 +8,8 @@ const salonData = {
         phone2: "+55 (95) 98429-8305", // Graziele Bezerra (Vendas WePink & Depilação/Sobrancelhas)
         whatsapp: "5595984072160", // Luciana (Atendimento Salão)
         whatsappVendas: "5595984298305", // Graziele (Vendas Produtos WePink)
-        whatsapp2: "5595984298305",
-        instagram: "@glamourstudio",
+        instagram: "@glamourstudio_lg",
+        instagramUrl: "https://www.instagram.com/glamourstudio_lg/",
         email: "contato@glamourstudio.com.br",
         address: "Av. Tuxaua Farias, 259, Bonfim - RR, 69380-000",
         logoImage: "assets/images/logo-glamour-studio.jpg",
@@ -34,6 +34,8 @@ const salonData = {
         {
             id: "escova-progressiva",
             category: "alinhamento",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Escova Progressiva Glamour",
             description: "Alisamento completo e duradouro com selagem térmica profunda por Luciana Bezerra. Liso impecável e brilho espelhado.<br><strong>Curtos: R$ 150,00 | Grandes / Longos: R$ 270,00</strong>",
             duration: "3h",
@@ -48,6 +50,8 @@ const salonData = {
         {
             id: "realinhamento-capilar",
             category: "alinhamento",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Realinhamento Capilar Orgânico",
             description: "Alinhamento térmico com redução de volume e reposição de massa sem formol por Luciana Bezerra. Fios disciplinados, sedosos e com balanço natural.<br><strong>Curtos: R$ 150,00 | Grandes / Longos: R$ 270,00</strong>",
             duration: "2h30",
@@ -62,6 +66,8 @@ const salonData = {
         {
             id: "botox-capilar",
             category: "alinhamento",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Botox Capilar Disciplinante",
             description: "Tratamento reconstrutor intensivo antifrizz e redutor de volume por Luciana Bezerra. Preenche a fibra capilar e confere brilho acetinado extremo.<br><strong>Curtos: R$ 150,00 | Grandes / Longos: R$ 270,00</strong>",
             duration: "2h",
@@ -76,6 +82,8 @@ const salonData = {
         {
             id: "banho-de-brilho",
             category: "alinhamento",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Banho de Brilho",
             description: "Tratamento revitalizante para realçar a luminosidade da cor, selar as cutículas e proporcionar brilho espelhado deslumbrante por Luciana Bezerra.",
             duration: "1h30",
@@ -88,6 +96,8 @@ const salonData = {
         {
             id: "cronograma-capilar",
             category: "alinhamento",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Cronograma Capilar Intensivo",
             description: "Tratamento em etapas com Nutrição lipídica, Hidratação profunda e Reconstrução com aminoácidos por Luciana Bezerra.",
             duration: "1h15",
@@ -104,6 +114,8 @@ const salonData = {
         {
             id: "hidratacao-escova",
             category: "cabelo",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Hidratação + Escova",
             description: "Lavagem relaxante com hidratação profunda reconstrutora de nutrientes e finalização com escova alinhada, solta e com brilho espelhado por Luciana Bezerra.",
             duration: "1h",
@@ -117,6 +129,8 @@ const salonData = {
         {
             id: "hidratacao-escova-babyliss",
             category: "cabelo",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Hidratação + Escova + Babyliss",
             description: "Combo completo de tratamento capilar hidratante, escovação impecável e modelagem de ondas deslumbrantes com babyliss de alta durabilidade por Luciana Bezerra.",
             duration: "1h15",
@@ -134,6 +148,8 @@ const salonData = {
         {
             id: "designer-personalizado",
             category: "sobrancelhas",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Designer Personalizado",
             description: "Mapeamento facial milimétrico e desenho personalizado das sobrancelhas por Graziele Bezerra de acordo com a simetria do seu rosto.",
             duration: "30min",
@@ -147,6 +163,8 @@ const salonData = {
         {
             id: "design-henna",
             category: "sobrancelhas",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Designer Personalizado + Henna",
             description: "Mapeamento simétrico com pinça e aplicação de henna de alta fixação com efeito sombreado natural por Graziele Bezerra.",
             duration: "45min",
@@ -163,6 +181,8 @@ const salonData = {
         {
             id: "depilacao-intimo-completo",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Íntimo Completo",
             description: "Técnica suave com cera morna natural por Graziele Bezerra. Remoção completa dos pelos com máximo conforto, higiene e pele sedosa.",
             duration: "40min",
@@ -176,6 +196,8 @@ const salonData = {
         {
             id: "depilacao-perna-completa",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Perna Completa",
             description: "Depilação integral das pernas com cera suave por Graziele Bezerra e aplicação de loção calmante hidratante pós-procedimento.",
             duration: "35min",
@@ -189,6 +211,8 @@ const salonData = {
         {
             id: "depilacao-meia-perna",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Meia Perna",
             description: "Depilação rápida, prática e suave do joelho aos pés com cera morna natural e hidratação imediata por Graziele Bezerra.",
             duration: "20min",
@@ -202,6 +226,8 @@ const salonData = {
         {
             id: "depilacao-axilas",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Axilas",
             description: "Remoção higiênica e confortável dos pelos das axilas por Graziele Bezerra, diminuindo irritações e deixando a pele macia.",
             duration: "15min",
@@ -215,6 +241,8 @@ const salonData = {
         {
             id: "depilacao-bracos",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Braços",
             description: "Remoção suave dos pelos dos braços por Graziele Bezerra com cera morna natural e finalização hidratante.",
             duration: "20min",
@@ -228,6 +256,8 @@ const salonData = {
         {
             id: "depilacao-facial",
             category: "depilacao",
+            professionalId: "graziele-bezerra",
+            professionalName: "Graziele Bezerra",
             name: "Depilação Facial",
             description: "Remoção delicada dos pelos faciais (buço e contorno facial) por Graziele Bezerra com produtos calmantes específicos para peles sensíveis.",
             duration: "15min",
@@ -245,6 +275,8 @@ const salonData = {
         {
             id: "manicure-mao",
             category: "unhas",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Manicure (Mão Tradicional)",
             description: "Cutilagem cuidadosa e higiênica com autoclave hospitalar por Luciana Bezerra, esfoliação suave, hidratação das cutículas e esmaltação impecável.",
             duration: "40min",
@@ -258,6 +290,8 @@ const salonData = {
         {
             id: "pedicure-pe",
             category: "unhas",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Pedicure (Pé Tradicional)",
             description: "Cuidado completo e higiênico dos pés por Luciana Bezerra. Cutilagem suave, esfoliação, hidratação profunda e esmaltação de alta durabilidade.",
             duration: "45min",
@@ -271,6 +305,8 @@ const salonData = {
         {
             id: "combo-pe-mao",
             category: "unhas",
+            professionalId: "luciana-bezerra",
+            professionalName: "Luciana Bezerra",
             name: "Combo Pé e Mão (Completo)",
             description: "Atendimento completo para mãos e pés por Luciana Bezerra com esfoliação, cutilagem esterilizada, hidratação e esmaltação perfeita.",
             duration: "1h20",
@@ -675,3 +711,7 @@ const salonData = {
         }
     ]
 };
+
+if (typeof window !== 'undefined') {
+    window.salonData = salonData;
+}
