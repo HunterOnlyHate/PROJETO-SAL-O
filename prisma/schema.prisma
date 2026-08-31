@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model Product {
+  id          String   @id
+  name        String
+  brand       String   @default("WePink")
+  category    String
+  description String   @db.Text
+  volume      String?
+  price       Float
+  badge       String?
+  image       String
+  stock       Int      @default(10)
+  featured    Boolean  @default(false)
+  active      Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("products")
+}
+
+model Service {
+  id               String   @id
+  name             String
+  category         String
+  professionalId   String
+  professionalName String
+  description      String   @db.Text
+  duration         String
+  durationMinutes  Int      @default(30)
+  price            Float    @default(0)
+  priceMax         Float?
+  priceDisplay     String?
+  featured         Boolean  @default(false)
+  badge            String?
+  image            String
+  active           Boolean  @default(true)
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Professional {
+  id          String   @id
+  name        String
+  role        String
+  specialty   String   @db.Text
+  image       String?
+  experience  String   @db.Text
+  whatsapp    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("professionals")
+}
+
+model Appointment {
+  id               String   @id @default(cuid())
+  clientName       String
+  clientPhone      String
+  clientEmail      String?
+  notes            String?  @db.Text
+  date             String   // "YYYY-MM-DD"
+  startTime        String   // "10:00"
+  endTime          String   // "11:30"
+  durationMinutes  Int      @default(30)
+  professionalId   String   // "luciana-bezerra", "graziele-bezerra", "ambas"
+  professionalName String
+  serviceIds       String   @db.Text // JSON or comma-separated ids
+  serviceNames     String   @db.Text
+  totalPrice       Float    @default(0)
+  status           String   @default("PENDENTE") // "PENDENTE", "CONFIRMADO", "CONCLUIDO", "CANCELADO"
+  whatsappSent     Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([date])
+  @@index([professionalId, date])
+  @@index([status])
+  @@map("appointments")
+}
+
+model ScheduleSetting {
+  id                  String   @id @default(cuid())
+  dayOfWeek           Int      // 0 (Domingo) a 6 (Sábado)
+  isOpen              Boolean  @default(true)
+  openTime            String   @default("10:00") // "10:00"
+  closeTime           String   @default("18:00") // "18:00"
+  breakStart          String?  // "12:30"
+  breakEnd            String?  // "13:30"
+  slotIntervalMinutes Int      @default(30)
+  professionalId      String?  // null = Salão Geral, ou "luciana-bezerra", "graziele-bezerra"
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([dayOfWeek, professionalId])
+  @@map("schedule_settings")
+}
+
+model BlockedSlot {
+  id             String   @id @default(cuid())
+  date           String   // "YYYY-MM-DD"
+  startTime      String?  // null = dia inteiro, ou "14:00"
+  endTime        String?  // null = dia inteiro, ou "16:00"
+  professionalId String?  // null = Salão Fechado, ou id específico
+  reason         String   @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([date])
+  @@map("blocked_slots")
+}
+
