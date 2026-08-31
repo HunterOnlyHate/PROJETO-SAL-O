@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import "../src/styles/animations.css";
+@import "../src/styles/style.css";
+
+/* Next.js & React specific additions */
+.toast-notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #141113;
+    color: #FAF7F8;
+    border: 1px solid rgba(197, 160, 89, 0.4);
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 99999;
+    animation: fadeIn 0.3s ease-out;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   ADMIN RESPONSIVE & MOBILE UI/UX SYSTEM
+   ========================================================================== */
+
+.admin-table-row:hover {
+    background-color: rgba(235, 100, 150, 0.04);
+}
+
+/* Utilitário para ocultar scrollbars mantendo a rolagem por toque */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Container Principal Responsivo */
+.admin-content-padding {
+    padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .admin-content-padding {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-content-padding {
+        padding: 1rem 0.85rem;
+    }
+}
+
+/* Grid de Estatísticas Responsivo */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 440px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+}
+
+/* Grid de 2 Colunas Responsivo */
+.admin-two-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+    .admin-two-cols {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Sidebar & Mobile Toggle */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        transform: translateX(-100%) !important;
+        z-index: 9999 !important;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8) !important;
+    }
+    .admin-sidebar.mobile-open {
+        transform: translateX(0) !important;
+    }
+    .admin-mobile-toggle {
+        display: flex !important;
+    }
+}
+
+/* Prevenção de Zoom no iOS Safari ao focar inputs */
+@media (max-width: 768px) {
+    .admin-input-touch,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Barra inferior mobile (Safe area aware) */
+.admin-bottom-nav {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 1025px) {
+    .admin-bottom-nav {
+        display: none !important;
+    }
+}
+
+/* Touch feedback suave */
+.admin-touch-target {
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+/* Ícones de Relógio e Calendário Brancos em inputs time e date */
+input[type="time"],
+input[type="date"],
+input[type="datetime-local"] {
+    color-scheme: dark !important;
+    color: #ffffff !important;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) invert(1) !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    display: block !important;
+    background-size: contain !important;
+}
+
+input[type="time"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+input[type="time"]::-webkit-datetime-edit-text,
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field,
+input[type="time"]::-webkit-datetime-edit-ampm-field {
+    color: #ffffff !important;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator:hover,
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.8 !important;
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   ADMIN SERVICES RESPONSIVE GRID & TABLE UTILITIES
+   ========================================================================== */
+
+/* Grid de Cards de Serviços no Admin */
+.admin-services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .admin-services-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+}
+
+/* Tabela Administrativa Responsiva com Rolagem Suave */
+.admin-table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    background-color: #17141b;
+    border: 1px solid rgba(235, 100, 150, 0.15);
+}
+
+.admin-custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    min-width: 780px;
+}
+
+.admin-custom-table th {
+    background-color: #1c1722;
+    color: #a89fad;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+}
+
+.admin-custom-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.88rem;
+    color: #e5e0ea;
+    vertical-align: middle;
+}
+
+.admin-custom-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-custom-table tr:hover td {
+    background-color: rgba(235, 100, 150, 0.04);
+}
+
+/* Toast Seguro para Mobile com Safe Area */
+.admin-floating-toast {
+    position: fixed;
+    bottom: calc(76px + env(safe-area-inset-bottom, 12px));
+    right: 1.5rem;
+    z-index: 9999;
+    max-width: calc(100vw - 3rem);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 1.3rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+    animation: fadeIn 0.25s ease-out;
+}
+
+@media (min-width: 1025px) {
+    .admin-floating-toast {
+        bottom: 2rem;
+        right: 2rem;
+    }
+}
+
+
