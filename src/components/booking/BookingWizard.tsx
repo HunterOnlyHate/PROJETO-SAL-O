@@ -408,7 +408,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
             : 'A consultar no WhatsApp';
 
     return (
-        <div className="booking-wizard" style={{ background: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #E5DFDC', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)', color: '#1C1819', display: 'flex', flexDirection: 'column' }}>
+        <div className="booking-wizard" style={{ background: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #E5DFDC', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)', color: '#1C1819', display: 'flex', flexDirection: 'column', width: '100%' }}>
             {/* Step Indicators */}
             <div
                 className="step-indicators"
@@ -422,7 +422,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                 {[
                     { num: 1, label: '1. Procedimentos' },
                     { num: 2, label: '2. Especialista' },
-                    { num: 3, label: '3. Data & Horário' },
+                    { num: 3, label: '3. Horários' },
                     { num: 4, label: '4. Confirmação' },
                 ].map((st) => (
                     <div
@@ -430,12 +430,15 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                         className={`step-indicator ${currentStep >= st.num ? 'active' : ''}`}
                         style={{
                             flex: 1,
-                            padding: '14px 8px',
+                            padding: '10px 4px',
                             textAlign: 'center',
-                            fontSize: '0.86rem',
+                            fontSize: 'clamp(0.72rem, 2.5vw, 0.86rem)',
                             fontWeight: 700,
                             color: currentStep >= st.num ? '#A68037' : '#887E82',
                             borderBottom: currentStep >= st.num ? '3px solid #C5A059' : '3px solid transparent',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                         }}
                     >
                         {st.label}
@@ -447,14 +450,15 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
             {toastMessage && (
                 <div
                     style={{
-                        margin: '1rem 1.5rem 0',
-                        padding: '0.75rem 1rem',
+                        margin: '0.75rem 1rem 0',
+                        padding: '0.65rem 0.85rem',
                         borderRadius: '10px',
                         background: '#FFF5F5',
                         border: '1.5px solid #FFA8A8',
                         color: '#C92A2A',
-                        fontSize: '0.88rem',
+                        fontSize: '0.84rem',
                         fontWeight: 600,
+                        lineHeight: 1.35,
                     }}
                 >
                     ⚠️ {toastMessage}
@@ -462,21 +466,21 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
             )}
 
             {/* Step Content */}
-            <div style={{ padding: '1.75rem', maxHeight: '65vh', overflowY: 'auto', flex: '1 1 auto' }}>
+            <div style={{ padding: '1.25rem 1rem', minHeight: 0, overflowY: 'auto', flex: '1 1 auto', WebkitOverflowScrolling: 'touch' }}>
                 {/* STEP 1: SERVIÇOS */}
                 {currentStep === 1 && (
                     <div>
-                        <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: '#1C1819', margin: 0, fontWeight: 700 }}>
+                        <div style={{ marginBottom: '0.85rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)', color: '#1C1819', margin: 0, fontWeight: 700 }}>
                                 Escolha os Procedimentos Desejados
                             </h3>
-                            <span style={{ fontSize: '0.88rem', color: '#A68037', fontWeight: 700 }}>
+                            <span style={{ fontSize: '0.82rem', color: '#A68037', fontWeight: 700 }}>
                                 {selectedServices.length} selecionado(s) • ⏱️ {durationFormatted}
                             </span>
                         </div>
 
                         {/* Barra de busca */}
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ marginBottom: '0.85rem' }}>
                             <input
                                 type="text"
                                 placeholder="🔍 Buscar procedimento (ex: progressiva, sobrancelhas, manicure)..."
@@ -484,25 +488,29 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 style={{
                                     width: '100%',
-                                    padding: '10px 14px',
+                                    padding: '10px 12px',
                                     borderRadius: '10px',
                                     border: '1.5px solid #E5DFDC',
                                     background: '#FAF7F5',
-                                    fontSize: '0.92rem',
+                                    fontSize: '16px',
                                     color: '#1C1819',
                                     fontWeight: 500,
+                                    minHeight: '44px',
                                 }}
                             />
                         </div>
 
                         {/* Abas de Categoria */}
                         <div
+                            className="no-scrollbar"
                             style={{
                                 display: 'flex',
-                                gap: '8px',
+                                gap: '6px',
                                 overflowX: 'auto',
-                                paddingBottom: '8px',
-                                marginBottom: '1.25rem',
+                                paddingBottom: '6px',
+                                marginBottom: '1rem',
+                                WebkitOverflowScrolling: 'touch',
+                                scrollbarWidth: 'none',
                             }}
                         >
                             {salonData.categories.map((cat) => (
@@ -511,15 +519,17 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                     type="button"
                                     onClick={() => setSelectedCategory(cat.id)}
                                     style={{
-                                        padding: '7px 14px',
+                                        padding: '6px 12px',
                                         borderRadius: '20px',
                                         border: selectedCategory === cat.id ? '1.5px solid #C5A059' : '1.5px solid #E5DFDC',
                                         background: selectedCategory === cat.id ? '#FAF6EE' : '#FFFFFF',
                                         color: selectedCategory === cat.id ? '#A68037' : '#524B4E',
-                                        fontSize: '0.82rem',
+                                        fontSize: '0.8rem',
                                         fontWeight: 700,
                                         whiteSpace: 'nowrap',
                                         cursor: 'pointer',
+                                        minHeight: '34px',
+                                        touchAction: 'manipulation',
                                     }}
                                 >
                                     {cat.icon} {cat.name}
@@ -528,7 +538,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                         </div>
 
                         {/* Lista de Procedimentos */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '12px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '10px' }}>
                             {filteredServices.map((service) => {
                                 const isSelected = selectedServices.includes(service.id);
                                 return (
@@ -656,24 +666,24 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                 {/* STEP 3: DATA E HORA (ALTO CONTRASTE) */}
                 {currentStep === 3 && (
                     <div>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: '#1C1819', marginBottom: '0.4rem', fontWeight: 700 }}>
-                            {isDual ? 'Agendas de Luciana & Graziele' : 'Escolha a Data e o Horário Desejado'}
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)', color: '#1C1819', marginBottom: '0.35rem', fontWeight: 700 }}>
+                            {isDual ? 'Agendas de Luciana & Graziele' : 'Escolha a Data e o Horário'}
                         </h3>
-                        <p style={{ fontSize: '0.86rem', color: '#524B4E', marginBottom: '1.25rem' }}>
+                        <p style={{ fontSize: '0.84rem', color: '#524B4E', marginBottom: '1rem', lineHeight: 1.4 }}>
                             {isDual
                                 ? 'Cada profissional possui sua agenda específica. Defina os horários em sequência ou livres sem colisão.'
                                 : `Duração calculada: ${durationFormatted}. Vagas livres em tempo real.`}
                         </p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                             {/* Data */}
-                            <div style={{ padding: '14px', background: '#FAF7F5', borderRadius: '12px', border: '1.5px solid #E5DFDC' }}>
+                            <div style={{ padding: '12px', background: '#FAF7F5', borderRadius: '12px', border: '1.5px solid #E5DFDC' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
-                                    <label style={{ margin: 0, fontSize: '0.88rem', fontWeight: 700, color: '#1C1819' }}>
-                                        📅 Data do Atendimento
+                                    <label style={{ margin: 0, fontSize: '0.84rem', fontWeight: 700, color: '#1C1819' }}>
+                                        📅 Data do Atendimento:
                                     </label>
                                     {selectedDate && (
-                                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#8A1C3E', backgroundColor: '#FFF5F7', padding: '3px 10px', borderRadius: '6px', border: '1px solid #F3C5D1' }}>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8A1C3E', backgroundColor: '#FFF5F7', padding: '2px 8px', borderRadius: '6px', border: '1px solid #F3C5D1' }}>
                                             {formatDateToBR(selectedDate)} ({getWeekdayName(selectedDate)})
                                         </span>
                                     )}
@@ -681,13 +691,15 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
 
                                 {/* Chips de Escolha Rápida de Dias */}
                                 <div
+                                    className="no-scrollbar"
                                     style={{
                                         display: 'flex',
                                         gap: '6px',
                                         overflowX: 'auto',
-                                        paddingBottom: '6px',
+                                        paddingBottom: '4px',
                                         marginBottom: '8px',
                                         WebkitOverflowScrolling: 'touch',
+                                        scrollbarWidth: 'none',
                                     }}
                                 >
                                     {getUpcomingDates(8).map((d) => {
@@ -700,7 +712,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                 onClick={() => setSelectedDate(d.dateStr)}
                                                 style={{
                                                     flexShrink: 0,
-                                                    padding: '6px 11px',
+                                                    padding: '6px 10px',
                                                     borderRadius: '8px',
                                                     border: isSelected
                                                         ? '1.5px solid #A68037'
@@ -718,10 +730,12 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                         ? '#A09699'
                                                         : '#1C1819',
                                                     fontWeight: isSelected ? 700 : 600,
-                                                    fontSize: '0.82rem',
+                                                    fontSize: '0.8rem',
                                                     cursor: d.isSunday ? 'not-allowed' : 'pointer',
                                                     opacity: d.isSunday ? 0.6 : 1,
                                                     whiteSpace: 'nowrap',
+                                                    minHeight: '34px',
+                                                    touchAction: 'manipulation',
                                                 }}
                                             >
                                                 {d.label} {d.isSunday ? '(Fechado)' : ''}
@@ -742,23 +756,24 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                         borderRadius: '8px',
                                         border: '1.5px solid #C5A059',
                                         background: '#FFFFFF',
-                                        fontSize: '0.95rem',
+                                        fontSize: '16px',
                                         color: '#1C1819',
                                         fontWeight: 600,
+                                        minHeight: '46px',
                                     }}
                                 />
-                                <span style={{ fontSize: '0.78rem', color: '#524B4E', display: 'block', marginTop: '6px' }}>
+                                <span style={{ fontSize: '0.76rem', color: '#524B4E', display: 'block', marginTop: '4px' }}>
                                     Formato: <strong>DD/MM/AAAA</strong> • Segunda a Sábado das 10:00 às 18:00.
                                 </span>
                             </div>
 
                             {/* CASO DUAL */}
                             {isDual ? (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '10px' }}>
                                     {/* Luciana */}
-                                    <div style={{ padding: '14px', background: '#FFF9FA', borderRadius: '12px', border: '1.5px solid #F3C5D1' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                            <span style={{ fontSize: '0.92rem', fontWeight: 800, color: '#8A1C3E' }}>
+                                    <div style={{ padding: '12px', background: '#FFF9FA', borderRadius: '12px', border: '1.5px solid #F3C5D1' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                            <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#8A1C3E' }}>
                                                 💇‍♀️ Luciana ({lucianaDurationFormatted})
                                             </span>
                                             {isLoadingLucianaSlots && <span style={{ fontSize: '0.74rem', color: '#A68037', fontWeight: 700 }}>🔄...</span>}
@@ -768,13 +783,13 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                             <button
                                                 type="button"
                                                 onClick={() => setLucianaTime(suggestedLucianaSeq)}
-                                                style={{ width: '100%', padding: '5px 8px', borderRadius: '6px', background: '#FFF4D9', border: '1.5px solid #E6B800', color: '#7A4E00', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', marginBottom: '8px', textAlign: 'left' }}
+                                                style={{ width: '100%', padding: '5px 8px', borderRadius: '6px', background: '#FFF4D9', border: '1.5px solid #E6B800', color: '#7A4E00', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', textAlign: 'left', touchAction: 'manipulation' }}
                                             >
                                                 ⚡ Agendar às <strong>{suggestedLucianaSeq}</strong> (após Graziele)
                                             </button>
                                         )}
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 75px), 1fr))', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 68px), 1fr))', gap: '5px', maxHeight: '180px', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
                                             {filteredLucianaSlots.map((slot) => {
                                                 const isSel = lucianaTime === slot.time;
                                                 return (
@@ -790,10 +805,12 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                             border: isSel ? '2px solid #8A1C3E' : slot.available ? '1.5px solid #E5DFDC' : '1px dashed #DDD',
                                                             background: isSel ? '#9B2C4D' : slot.available ? '#FFFFFF' : '#F0ECEB',
                                                             color: isSel ? '#FFFFFF' : slot.available ? '#1C1819' : '#887E82',
-                                                            fontSize: '0.82rem',
+                                                            fontSize: '0.8rem',
                                                             fontWeight: 700,
                                                             cursor: slot.available ? 'pointer' : 'not-allowed',
                                                             opacity: slot.available ? 1 : 0.55,
+                                                            minHeight: '44px',
+                                                            touchAction: 'manipulation',
                                                         }}
                                                     >
                                                         {slot.time}
@@ -804,9 +821,9 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                     </div>
 
                                     {/* Graziele */}
-                                    <div style={{ padding: '14px', background: '#FFFBFD', borderRadius: '12px', border: '1.5px solid #F5CEDB' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                            <span style={{ fontSize: '0.92rem', fontWeight: 800, color: '#922B5C' }}>
+                                    <div style={{ padding: '12px', background: '#FFFBFD', borderRadius: '12px', border: '1.5px solid #F5CEDB' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                            <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#922B5C' }}>
                                                 🌸 Graziele ({grazieleDurationFormatted})
                                             </span>
                                             {isLoadingGrazieleSlots && <span style={{ fontSize: '0.74rem', color: '#A68037', fontWeight: 700 }}>🔄...</span>}
@@ -816,13 +833,13 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                             <button
                                                 type="button"
                                                 onClick={() => setGrazieleTime(suggestedGrazieleSeq)}
-                                                style={{ width: '100%', padding: '5px 8px', borderRadius: '6px', background: '#FFF4D9', border: '1.5px solid #E6B800', color: '#7A4E00', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', marginBottom: '8px', textAlign: 'left' }}
+                                                style={{ width: '100%', padding: '5px 8px', borderRadius: '6px', background: '#FFF4D9', border: '1.5px solid #E6B800', color: '#7A4E00', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', textAlign: 'left', touchAction: 'manipulation' }}
                                             >
                                                 ⚡ Agendar às <strong>{suggestedGrazieleSeq}</strong> (após Luciana)
                                             </button>
                                         )}
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 75px), 1fr))', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 68px), 1fr))', gap: '5px', maxHeight: '180px', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
                                             {filteredGrazieleSlots.map((slot) => {
                                                 const isSel = grazieleTime === slot.time;
                                                 return (
@@ -838,10 +855,12 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                             border: isSel ? '2px solid #922B5C' : slot.available ? '1.5px solid #E5DFDC' : '1px dashed #DDD',
                                                             background: isSel ? '#A33B6E' : slot.available ? '#FFFFFF' : '#F0ECEB',
                                                             color: isSel ? '#FFFFFF' : slot.available ? '#1C1819' : '#887E82',
-                                                            fontSize: '0.82rem',
+                                                            fontSize: '0.8rem',
                                                             fontWeight: 700,
                                                             cursor: slot.available ? 'pointer' : 'not-allowed',
                                                             opacity: slot.available ? 1 : 0.55,
+                                                            minHeight: '44px',
+                                                            touchAction: 'manipulation',
                                                         }}
                                                     >
                                                         {slot.time}
@@ -853,24 +872,24 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                 </div>
                             ) : (
                                 /* CASO SIMPLES */
-                                <div style={{ padding: '14px', background: '#FAF7F5', borderRadius: '12px', border: '1.5px solid #E5DFDC' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                        <label style={{ fontSize: '0.88rem', fontWeight: 700, color: '#1C1819', margin: 0 }}>
-                                            🕒 Horários Livres ({durationFormatted})
+                                <div style={{ padding: '12px', background: '#FAF7F5', borderRadius: '12px', border: '1.5px solid #E5DFDC' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexWrap: 'wrap', gap: '4px' }}>
+                                        <label style={{ fontSize: '0.84rem', fontWeight: 700, color: '#1C1819', margin: 0 }}>
+                                            🕒 Horários ({durationFormatted})
                                         </label>
                                         {isLoadingSlots && (
-                                            <span style={{ fontSize: '0.78rem', color: '#A68037', fontWeight: 700 }}>
+                                            <span style={{ fontSize: '0.76rem', color: '#A68037', fontWeight: 700 }}>
                                                 🔄 Buscando...
                                             </span>
                                         )}
                                     </div>
 
                                     {!isDayOpen ? (
-                                        <div style={{ padding: '1rem', background: '#FFF5F5', color: '#C92A2A', borderRadius: '8px', textAlign: 'center', fontSize: '0.88rem', fontWeight: 600, border: '1px solid #FFA8A8' }}>
+                                        <div style={{ padding: '1rem', background: '#FFF5F5', color: '#C92A2A', borderRadius: '8px', textAlign: 'center', fontSize: '0.86rem', fontWeight: 600, border: '1px solid #FFA8A8' }}>
                                             🔒 {closedReason || 'Salão Fechado Nesta Data'}
                                         </div>
                                     ) : (
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 105px), 1fr))', gap: '6px', maxHeight: '180px', overflowY: 'auto' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 78px), 1fr))', gap: '6px' }}>
                                             {availableSlots.map((slot) => {
                                                 const isSelected = selectedTime === slot.time;
                                                 return (
@@ -881,15 +900,17 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                         onClick={() => slot.available && setSelectedTime(slot.time)}
                                                         title={slot.reason || 'Disponível'}
                                                         style={{
-                                                            padding: '8px 4px',
+                                                            padding: '6px 3px',
                                                             borderRadius: '8px',
                                                             border: isSelected ? '2px solid #9E7A32' : slot.available ? '1.5px solid #E5DFDC' : '1px dashed #DDD',
                                                             background: isSelected ? '#C5A059' : slot.available ? '#FFFFFF' : '#F0ECEB',
                                                             color: isSelected ? '#FFFFFF' : slot.available ? '#1C1819' : '#887E82',
-                                                            fontSize: '0.88rem',
+                                                            fontSize: '0.85rem',
                                                             fontWeight: 700,
                                                             cursor: slot.available ? 'pointer' : 'not-allowed',
                                                             opacity: slot.available ? 1 : 0.5,
+                                                            minHeight: '46px',
+                                                            touchAction: 'manipulation',
                                                         }}
                                                     >
                                                         {slot.time}
@@ -907,18 +928,18 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                 {/* STEP 4: IDENTIFICAÇÃO E RESUMO */}
                 {currentStep === 4 && (
                     <div>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: '#1C1819', marginBottom: '0.4rem', fontWeight: 700 }}>
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.05rem, 3.5vw, 1.25rem)', color: '#1C1819', marginBottom: '0.35rem', fontWeight: 700 }}>
                             Finalize seu Agendamento
                         </h3>
-                        <p style={{ fontSize: '0.86rem', color: '#524B4E', marginBottom: '1.25rem' }}>
+                        <p style={{ fontSize: '0.84rem', color: '#524B4E', marginBottom: '1rem', lineHeight: 1.4 }}>
                             Preencha seus dados para receber a confirmação no WhatsApp.
                         </p>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '14px' }}>
                             {/* Formulário */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#1C1819', marginBottom: '4px' }}>
+                                    <label style={{ display: 'block', fontSize: '0.84rem', fontWeight: 700, color: '#1C1819', marginBottom: '4px' }}>
                                         Seu Nome Completo *
                                     </label>
                                     <input
@@ -932,7 +953,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
 
                                 <div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
-                                        <label style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700, color: '#1C1819' }}>
+                                        <label style={{ margin: 0, fontSize: '0.84rem', fontWeight: 700, color: '#1C1819' }}>
                                             WhatsApp para Contato *
                                         </label>
                                         <div style={{ display: 'flex', gap: '6px', width: '100%', maxWidth: '320px' }}>
@@ -953,6 +974,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
+                                                    touchAction: 'manipulation',
                                                 }}
                                             >
                                                 🇧🇷 Brasil (+55)
@@ -974,6 +996,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
+                                                    touchAction: 'manipulation',
                                                 }}
                                             >
                                                 🇬🇾 Lethem (+592)
@@ -989,15 +1012,15 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                         onChange={(e) => handlePhoneChange(e.target.value)}
                                         style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E5DFDC', background: '#FFFFFF', color: '#1C1819', fontSize: '16px', minHeight: '46px' }}
                                     />
-                                    <span style={{ fontSize: '0.78rem', color: '#524B4E', display: 'block', marginTop: '4px' }}>
+                                    <span style={{ fontSize: '0.76rem', color: '#524B4E', display: 'block', marginTop: '4px', lineHeight: 1.3 }}>
                                         {phoneCountry === 'GY'
-                                            ? '🇬🇾 Lethem / Guiana: Digite os 7 dígitos do celular (ex: 612-3456 ou 700-1234).'
+                                            ? '🇬🇾 Lethem / Guiana: Digite os 7 dígitos do celular (ex: 612-3456).'
                                             : '🇧🇷 Brasil: Digite DDD + número (ex: 95 98400-0000).'}
                                     </span>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#1C1819', marginBottom: '4px' }}>
+                                    <label style={{ display: 'block', fontSize: '0.84rem', fontWeight: 700, color: '#1C1819', marginBottom: '4px' }}>
                                         Observações (Opcional)
                                     </label>
                                     <textarea
@@ -1005,40 +1028,40 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                                         placeholder="Ex: Primeira vez no salão..."
                                         value={clientNotes}
                                         onChange={(e) => setClientNotes(e.target.value)}
-                                        style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E5DFDC', background: '#FFFFFF', color: '#1C1819', fontSize: '0.92rem' }}
+                                        style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E5DFDC', background: '#FFFFFF', color: '#1C1819', fontSize: '16px', minHeight: '64px' }}
                                     />
                                 </div>
                             </div>
 
                             {/* Card de Resumo */}
-                            <div style={{ padding: '16px', borderRadius: '12px', background: '#FAF7F5', border: '1.5px solid #E5DFDC', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <div style={{ fontWeight: 800, fontSize: '0.98rem', color: '#1C1819', borderBottom: '1px solid #E5DFDC', paddingBottom: '8px' }}>
+                            <div style={{ padding: '14px', borderRadius: '12px', background: '#FAF7F5', border: '1.5px solid #E5DFDC', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <div style={{ fontWeight: 800, fontSize: '0.94rem', color: '#1C1819', borderBottom: '1px solid #E5DFDC', paddingBottom: '6px' }}>
                                     📋 Resumo do Pedido
                                 </div>
-                                <div style={{ fontSize: '0.85rem', color: '#524B4E' }}>
+                                <div style={{ fontSize: '0.84rem', color: '#524B4E' }}>
                                     📅 <strong>Data:</strong> {selectedDate.split('-').reverse().join('/')}
                                 </div>
 
                                 {isDual ? (
                                     <>
-                                        <div style={{ fontSize: '0.85rem', color: '#1C1819', background: '#FFF5F7', padding: '8px', borderRadius: '6px', borderLeft: '3px solid #9B2C4D' }}>
+                                        <div style={{ fontSize: '0.82rem', color: '#1C1819', background: '#FFF5F7', padding: '8px', borderRadius: '6px', borderLeft: '3px solid #9B2C4D' }}>
                                             <strong style={{ color: '#8A1C3E' }}>💇‍♀️ Luciana ({lucianaTime} às {lucianaEndTime}):</strong>
-                                            <div>{lucianaServices.map((s) => s.name).join(', ')}</div>
+                                            <div style={{ marginTop: '2px', wordBreak: 'break-word' }}>{lucianaServices.map((s) => s.name).join(', ')}</div>
                                         </div>
-                                        <div style={{ fontSize: '0.85rem', color: '#1C1819', background: '#FFF8FA', padding: '8px', borderRadius: '6px', borderLeft: '3px solid #A33B6E' }}>
+                                        <div style={{ fontSize: '0.82rem', color: '#1C1819', background: '#FFF8FA', padding: '8px', borderRadius: '6px', borderLeft: '3px solid #A33B6E' }}>
                                             <strong style={{ color: '#922B5C' }}>🌸 Graziele ({grazieleTime} às {grazieleEndTime}):</strong>
-                                            <div>{grazieleServices.map((s) => s.name).join(', ')}</div>
+                                            <div style={{ marginTop: '2px', wordBreak: 'break-word' }}>{grazieleServices.map((s) => s.name).join(', ')}</div>
                                         </div>
                                     </>
                                 ) : (
-                                    <div style={{ fontSize: '0.85rem', color: '#1C1819' }}>
+                                    <div style={{ fontSize: '0.84rem', color: '#1C1819' }}>
                                         🕒 <strong>Horário:</strong> {selectedTime} às {singleEndTime}
                                     </div>
                                 )}
 
-                                <div style={{ borderTop: '2px solid #E5DFDC', paddingTop: '8px', marginTop: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontWeight: 700, color: '#1C1819' }}>Total Estimado:</span>
-                                    <span style={{ fontWeight: 800, color: '#A68037', fontSize: '1.15rem' }}>{priceDisplay}</span>
+                                <div style={{ borderTop: '2px solid #E5DFDC', paddingTop: '8px', marginTop: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                                    <span style={{ fontWeight: 700, color: '#1C1819', fontSize: '0.92rem' }}>Total Estimado:</span>
+                                    <span style={{ fontWeight: 800, color: '#A68037', fontSize: '1.1rem' }}>{priceDisplay}</span>
                                 </div>
                             </div>
                         </div>
@@ -1046,20 +1069,21 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                 )}
             </div>
 
-            {/* Footer Navigation - Fixado no rodapé */}
+            {/* Footer Navigation - Fixado no rodapé com Safe Area */}
             <div
                 style={{
                     flexShrink: 0,
                     position: 'sticky',
                     bottom: 0,
                     zIndex: 20,
-                    padding: '1.25rem 1.75rem',
+                    padding: '0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px)) 1rem',
                     borderTop: '1.5px solid #E5DFDC',
                     background: '#FFFFFF',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    boxShadow: '0 -6px 20px rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.08)',
+                    gap: '0.5rem',
                 }}
             >
                 {currentStep > 1 ? (
@@ -1068,7 +1092,7 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                         onClick={handlePrev}
                         disabled={isSubmitting}
                         style={{
-                            padding: '8px 16px',
+                            padding: '8px 14px',
                             borderRadius: '8px',
                             border: '1.5px solid #E5DFDC',
                             background: '#FFFFFF',
@@ -1076,20 +1100,21 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                             fontSize: '0.88rem',
                             fontWeight: 700,
                             cursor: 'pointer',
+                            minHeight: '44px',
+                            flex: 1,
+                            touchAction: 'manipulation',
                         }}
                     >
                         ← Voltar
                     </button>
-                ) : (
-                    <div></div>
-                )}
+                ) : null}
 
                 {currentStep < totalSteps ? (
                     <button
                         type="button"
                         onClick={handleNext}
                         style={{
-                            padding: '10px 22px',
+                            padding: '10px 20px',
                             borderRadius: '8px',
                             border: 'none',
                             background: '#C5A059',
@@ -1097,6 +1122,9 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                             fontSize: '0.92rem',
                             fontWeight: 700,
                             cursor: 'pointer',
+                            minHeight: '44px',
+                            flex: currentStep === 1 ? 1 : 2,
+                            touchAction: 'manipulation',
                         }}
                     >
                         Avançar →
@@ -1107,17 +1135,21 @@ export function BookingWizard({ initialServiceId, onComplete }: BookingWizardPro
                         onClick={handleComplete}
                         disabled={isSubmitting}
                         style={{
-                            padding: '10px 22px',
+                            padding: '10px 18px',
                             borderRadius: '8px',
                             border: 'none',
                             background: 'linear-gradient(135deg, #25d366, #128c7e)',
                             color: '#FFFFFF',
-                            fontSize: '0.95rem',
+                            fontSize: '0.92rem',
                             fontWeight: 700,
                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
+                            justifyContent: 'center',
                             gap: '6px',
+                            minHeight: '44px',
+                            flex: 2,
+                            touchAction: 'manipulation',
                         }}
                     >
                         <span>💬</span> {isSubmitting ? 'Agendando...' : 'Confirmar no WhatsApp'}

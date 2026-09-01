@@ -149,17 +149,25 @@
     touch-action: manipulation;
 }
 
-/* Ícones de Relógio e Calendário Brancos em inputs time e date */
-input[type="time"],
-input[type="date"],
-input[type="datetime-local"] {
+/* Ícones de Relógio e Calendário Brancos apenas na Área Administrativa (Dark Theme) */
+.admin-sidebar input[type="time"],
+.admin-sidebar input[type="date"],
+.admin-sidebar input[type="datetime-local"],
+.admin-content-padding input[type="time"],
+.admin-content-padding input[type="date"],
+.admin-content-padding input[type="datetime-local"],
+.admin-custom-table input[type="time"],
+.admin-custom-table input[type="date"] {
     color-scheme: dark !important;
     color: #ffffff !important;
 }
 
-input[type="time"]::-webkit-calendar-picker-indicator,
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+.admin-sidebar input[type="time"]::-webkit-calendar-picker-indicator,
+.admin-sidebar input[type="date"]::-webkit-calendar-picker-indicator,
+.admin-sidebar input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.admin-content-padding input[type="time"]::-webkit-calendar-picker-indicator,
+.admin-content-padding input[type="date"]::-webkit-calendar-picker-indicator,
+.admin-content-padding input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     filter: brightness(0) invert(1) !important;
     cursor: pointer !important;
     opacity: 1 !important;
@@ -167,20 +175,31 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background-size: contain !important;
 }
 
-input[type="time"]::-webkit-datetime-edit,
-input[type="time"]::-webkit-datetime-edit-fields-wrapper,
-input[type="time"]::-webkit-datetime-edit-text,
-input[type="time"]::-webkit-datetime-edit-hour-field,
-input[type="time"]::-webkit-datetime-edit-minute-field,
-input[type="time"]::-webkit-datetime-edit-ampm-field {
+.admin-content-padding input[type="time"]::-webkit-datetime-edit,
+.admin-content-padding input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.admin-content-padding input[type="time"]::-webkit-datetime-edit-text,
+.admin-content-padding input[type="time"]::-webkit-datetime-edit-hour-field,
+.admin-content-padding input[type="time"]::-webkit-datetime-edit-minute-field,
+.admin-content-padding input[type="time"]::-webkit-datetime-edit-ampm-field {
     color: #ffffff !important;
 }
 
-input[type="time"]::-webkit-calendar-picker-indicator:hover,
-input[type="date"]::-webkit-calendar-picker-indicator:hover,
-input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+/* Modal de Agendamento Público (Light Theme) - Inputs de Data e Hora 100% Nítidos */
+.booking-modal input[type="date"],
+.booking-modal input[type="time"],
+.booking-wizard input[type="date"],
+.booking-wizard input[type="time"] {
+    color-scheme: light !important;
+    color: #1C1819 !important;
+    background-color: #FFFFFF !important;
+}
+
+.booking-modal input[type="date"]::-webkit-calendar-picker-indicator,
+.booking-wizard input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none !important;
+    cursor: pointer !important;
     opacity: 0.8 !important;
-    transform: scale(1.05);
+    display: block !important;
 }
 
 /* ==========================================================================
