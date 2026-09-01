@@ -2,6 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { salonData, Service } from '@/data/salonData';
 import { useBooking } from '@/context/BookingContext';
 
@@ -362,12 +364,17 @@ export function AgendarListClient({ initialServices }: AgendarListClientProps) {
                                 return (
                                     <div key={s.id} className="service-card">
                                         <div className="service-card-image">
-                                            <img
-                                                src={s.image}
+                                            <Image
+                                                src={s.image || '/assets/images/logo-glamour-studio.jpg'}
                                                 alt={s.name}
-                                                loading="lazy"
+                                                fill
+                                                unoptimized={!isOptimizableImage(s.image)}
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                style={{ objectFit: 'contain', padding: '6px' }}
                                                 onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                                    const target = e.currentTarget;
+                                                    target.srcset = '';
+                                                    target.src = '/assets/images/logo-glamour-studio.jpg';
                                                 }}
                                             />
                                             {s.badge && <span className="service-badge">{s.badge}</span>}

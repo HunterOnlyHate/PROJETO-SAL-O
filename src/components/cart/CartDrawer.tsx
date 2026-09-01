@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { useCart } from '@/context/CartContext';
 
 export function CartDrawer() {
@@ -86,7 +88,19 @@ export function CartDrawer() {
                             {items.map((item) => (
                                 <div key={item.id} className="cart-item-card">
                                     <div className="cart-item-img-wrapper">
-                                        <img src={item.image} alt={item.name} className="cart-item-img" />
+                                        <Image
+                                            src={item.image || '/assets/images/logo-glamour-studio.jpg'}
+                                            alt={item.name}
+                                            width={68}
+                                            height={68}
+                                            unoptimized={!isOptimizableImage(item.image)}
+                                            className="cart-item-img"
+                                            onError={(e) => {
+                                                const target = e.currentTarget;
+                                                target.srcset = '';
+                                                target.src = '/assets/images/logo-glamour-studio.jpg';
+                                            }}
+                                        />
                                     </div>
                                     <div className="cart-item-details">
                                         <div className="cart-item-top">

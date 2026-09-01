@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useBooking } from '@/context/BookingContext';
 
 export function Footer() {
@@ -13,7 +14,13 @@ export function Footer() {
                 <div className="footer-grid">
                     <div className="footer-brand">
                         <Link href="/#home" className="logo">
-                            <img src="/assets/images/logo-glamour-studio.jpg" alt="Glamour Studio" className="logo-badge-img" />
+                            <Image
+                                src="/assets/images/logo-glamour-studio.jpg"
+                                alt="Glamour Studio"
+                                width={46}
+                                height={46}
+                                className="logo-badge-img"
+                            />
                             <div className="logo-text-box">
                                 <span className="logo-main" style={{ color: '#FFFFFF' }}>GLAMOUR STUDIO</span>
                                 <span className="logo-sub" style={{ color: 'var(--gold-400)' }}>GRAZIELE & LUCIANA</span>

@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { salonData } from '@/data/salonData';
 
 export function TestimonialsSection() {
@@ -27,10 +29,22 @@ export function TestimonialsSection() {
                         <div key={idx} className="testimonial-card">
                             <div>
                                 <div className="testimonial-stars">★★★★★</div>
-                                <p className="testimonial-text">"{t.text}"</p>
+                                <p className="testimonial-text">&ldquo;{t.text}&rdquo;</p>
                             </div>
                             <div className="testimonial-author">
-                                <img src={t.avatar} alt={t.name} className="author-avatar" loading="lazy" />
+                                <Image
+                                    src={t.avatar}
+                                    alt={t.name}
+                                    width={48}
+                                    height={48}
+                                    unoptimized={!isOptimizableImage(t.avatar)}
+                                    className="author-avatar"
+                                    onError={(e) => {
+                                        const target = e.currentTarget;
+                                        target.srcset = '';
+                                        target.src = '/assets/images/logo-glamour-studio.jpg';
+                                    }}
+                                />
                                 <div className="author-info">
                                     <h5>{t.name}</h5>
                                     <p>

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { ProductModal } from '@/components/admin/ProductModal';
 import { DeleteConfirmModal } from '@/components/admin/DeleteConfirmModal';
@@ -253,19 +255,22 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
                                 }}
                             >
                                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                    <img
-                                        src={prod.image}
+                                    <Image
+                                        src={prod.image || '/assets/images/logo-glamour-studio.jpg'}
                                         alt={prod.name}
+                                        width={56}
+                                        height={56}
+                                        unoptimized={!isOptimizableImage(prod.image)}
                                         style={{
-                                            width: '56px',
-                                            height: '56px',
                                             borderRadius: '12px',
                                             objectFit: 'cover',
                                             backgroundColor: '#25202a',
                                             flexShrink: 0,
                                         }}
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                            const target = e.currentTarget;
+                                            target.srcset = '';
+                                            target.src = '/assets/images/logo-glamour-studio.jpg';
                                         }}
                                     />
 

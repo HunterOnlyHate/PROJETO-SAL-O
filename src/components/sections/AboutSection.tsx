@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useBooking } from '@/context/BookingContext';
 
 export function AboutSection() {
@@ -11,15 +12,21 @@ export function AboutSection() {
             <div className="container">
                 <div className="about-grid">
                     <div className="about-images-collage">
-                        <img
+                        <Image
                             src="/assets/images/logo-glamour-studio.jpg"
                             alt="Logo Glamour Studio"
+                            width={500}
+                            height={460}
                             className="about-main-image"
+                            sizes="(max-width: 768px) 90vw, 500px"
                         />
-                        <img
+                        <Image
                             src="/assets/images/cartao-visita-glamour.jpg"
                             alt="Cartão de Visita Glamour Studio"
+                            width={300}
+                            height={220}
                             className="about-sub-image"
+                            sizes="(max-width: 768px) 55vw, 300px"
                         />
                         <div className="about-experience-badge">
                             <strong>GS</strong>

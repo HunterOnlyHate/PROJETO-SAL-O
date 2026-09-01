@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { Product } from '@/data/salonData';
 import { useCart } from '@/context/CartContext';
 
@@ -120,12 +122,17 @@ export function ProdutosListClient({ initialProducts }: ProdutosListClientProps)
                             return (
                                 <div key={prod.id} className="product-card">
                                     <div className="product-img-wrapper">
-                                        <img
-                                            src={prod.image}
+                                        <Image
+                                            src={prod.image || '/assets/images/logo-glamour-studio.jpg'}
                                             alt={prod.name}
-                                            loading="lazy"
+                                            fill
+                                            unoptimized={!isOptimizableImage(prod.image)}
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                            style={{ objectFit: 'contain', padding: '8px' }}
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                                const target = e.currentTarget;
+                                                target.srcset = '';
+                                                target.src = '/assets/images/logo-glamour-studio.jpg';
                                             }}
                                         />
                                         {prod.badge && <span className="product-badge">{prod.badge}</span>}

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { ServiceModal } from '@/components/admin/ServiceModal';
 import { DeleteConfirmModal } from '@/components/admin/DeleteConfirmModal';
@@ -641,19 +643,22 @@ export function AdminServicesClient({ initialServices }: AdminServicesClientProp
                                     return (
                                         <tr key={serv.id} className="admin-table-row">
                                             <td style={{ textAlign: 'center' }}>
-                                                <img
-                                                    src={serv.image}
+                                                <Image
+                                                    src={serv.image || '/assets/images/logo-glamour-studio.jpg'}
                                                     alt={serv.name}
+                                                    width={36}
+                                                    height={36}
+                                                    unoptimized={!isOptimizableImage(serv.image)}
                                                     style={{
-                                                        width: '36px',
-                                                        height: '36px',
                                                         borderRadius: '8px',
                                                         objectFit: 'cover',
                                                         backgroundColor: '#25202a',
                                                         display: 'inline-block',
                                                     }}
                                                     onError={(e) => {
-                                                        (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                                        const target = e.currentTarget;
+                                                        target.srcset = '';
+                                                        target.src = '/assets/images/logo-glamour-studio.jpg';
                                                     }}
                                                 />
                                             </td>
@@ -805,19 +810,22 @@ export function AdminServicesClient({ initialServices }: AdminServicesClientProp
                                 >
                                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                                         {/* Foto Compacta */}
-                                        <img
-                                            src={serv.image}
+                                        <Image
+                                            src={serv.image || '/assets/images/logo-glamour-studio.jpg'}
                                             alt={serv.name}
+                                            width={46}
+                                            height={46}
+                                            unoptimized={!isOptimizableImage(serv.image)}
                                             style={{
-                                                width: '46px',
-                                                height: '46px',
                                                 borderRadius: '10px',
                                                 objectFit: 'cover',
                                                 backgroundColor: '#25202a',
                                                 flexShrink: 0,
                                             }}
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                                const target = e.currentTarget;
+                                                target.srcset = '';
+                                                target.src = '/assets/images/logo-glamour-studio.jpg';
                                             }}
                                         />
 

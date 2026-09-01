@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { salonData } from '@/data/salonData';
 import { useBooking } from '@/context/BookingContext';
 
@@ -25,7 +27,19 @@ export function GallerySection() {
                             className="gallery-item"
                             onClick={() => openBookingModal()}
                         >
-                            <img src={item.image} alt={item.title} loading="lazy" />
+                            <Image
+                                src={item.image}
+                                alt={item.title}
+                                fill
+                                unoptimized={!isOptimizableImage(item.image)}
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                style={{ objectFit: 'contain' }}
+                                onError={(e) => {
+                                    const target = e.currentTarget;
+                                    target.srcset = '';
+                                    target.src = '/assets/images/logo-glamour-studio.jpg';
+                                }}
+                            />
                             <div className="gallery-overlay">
                                 <p>{item.category}</p>
                                 <h4>{item.title}</h4>

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useBooking } from '@/context/BookingContext';
@@ -22,10 +23,13 @@ export function Header() {
             <header className="header" id="header">
                 <div className="container header-container">
                     <Link href="/#home" className="logo">
-                        <img
+                        <Image
                             src="/assets/images/logo-glamour-studio.jpg"
                             alt="Logo Glamour Studio"
+                            width={46}
+                            height={46}
                             className="logo-badge-img"
+                            preload={true}
                         />
                         <div className="logo-text-box">
                             <span className="logo-main">GLAMOUR STUDIO</span>

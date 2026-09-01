@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useBooking } from '@/context/BookingContext';
 
@@ -39,9 +40,11 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             >
                 <div className="mobile-drawer-header">
                     <div className="mobile-drawer-brand">
-                        <img
+                        <Image
                             src="/assets/images/logo-glamour-studio.jpg"
                             alt="Glamour Studio"
+                            width={40}
+                            height={40}
                             className="mobile-drawer-logo"
                         />
                         <div>

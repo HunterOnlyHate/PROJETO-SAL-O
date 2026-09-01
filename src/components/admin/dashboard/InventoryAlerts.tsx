@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 
 export interface ProductInventoryItem {
     id: string;
@@ -105,10 +107,18 @@ export function InventoryAlerts({ products }: InventoryAlertsProps) {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
-                                    <img
-                                        src={p.image}
+                                    <Image
+                                        src={p.image || '/assets/images/logo-glamour-studio.jpg'}
                                         alt={p.name}
-                                        style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover' }}
+                                        width={32}
+                                        height={32}
+                                        unoptimized={!isOptimizableImage(p.image)}
+                                        style={{ borderRadius: '6px', objectFit: 'cover' }}
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            target.srcset = '';
+                                            target.src = '/assets/images/logo-glamour-studio.jpg';
+                                        }}
                                     />
                                     <span style={{ fontSize: '0.82rem', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                         {p.name}

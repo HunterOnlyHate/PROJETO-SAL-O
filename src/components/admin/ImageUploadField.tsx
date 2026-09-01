@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
 import { uploadToCloudinary } from '@/lib/cloudinaryUpload';
 
 interface PresetOption {
@@ -152,14 +154,19 @@ export function ImageUploadField({
                                 backgroundColor: '#130f16',
                                 flexShrink: 0,
                                 border: '1px solid rgba(235, 100, 150, 0.3)',
+                                position: 'relative',
                             }}
                         >
-                            <img
-                                src={value}
+                            <Image
+                                src={value || '/assets/images/logo-glamour-studio.jpg'}
                                 alt="Prévia"
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                fill
+                                unoptimized={!isOptimizableImage(value)}
+                                style={{ objectFit: 'cover' }}
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = '/assets/images/logo-glamour-studio.jpg';
+                                    const target = e.currentTarget;
+                                    target.srcset = '';
+                                    target.src = '/assets/images/logo-glamour-studio.jpg';
                                 }}
                             />
                         </div>

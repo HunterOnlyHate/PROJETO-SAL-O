@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function HeroSection() {
     return (
@@ -23,23 +24,21 @@ export function HeroSection() {
                                 <span className="text-gold-gradient">dourado & cuidado exclusivo</span>
                             </h1>
 
-                            <p className="hero-authors-badge">Por Graziele Bezerra & Luciana Bezerra</p>
-
-                            <p className="hero-description">
-                                Um refúgio de autocuidado e alta técnica especializado em progressiva, realinhamento capilar,
-                                botox, banho de brilho, cronograma capilar, design de sobrancelhas com henna e manicure.
+                            <p className="hero-subtitle">
+                                Especialistas em <strong>Alinhamentos Capilares</strong> (Progressiva & Botox),{' '}
+                                <strong>Design de Sobrancelhas</strong>, <strong>Depilação Suave</strong> e{' '}
+                                <strong>Boutique Oficial WePink</strong> em Bonfim - RR.
                             </p>
 
-                            <div className="hero-cta-group">
+                            <div className="hero-actions">
                                 <Link href="/agendar" className="btn btn-primary btn-lg">
-                                    <span>💇‍♀️</span> Ver Procedimentos & Agendar
+                                    <span>📅</span> Agendar Horário Online
                                 </Link>
-                                <Link href="/produtos" className="btn btn-secondary btn-lg wepink-highlight">
-                                    <span>🌸</span> Boutique WePink (Frete Grátis)
+                                <Link href="/produtos" className="btn btn-outline btn-lg">
+                                    <span>🌸</span> Ver Perfumes & Cosméticos WePink
                                 </Link>
                             </div>
 
-                            {/* Métricas de Credibilidade */}
                             <div className="hero-stats">
                                 <div className="stat-item">
                                     <h4>+5.000</h4>
@@ -59,10 +58,14 @@ export function HeroSection() {
                         {/* Imagem Hero & Card Flutuante */}
                         <div className="hero-media">
                             <div className="hero-image-wrapper">
-                                <img
+                                <Image
                                     src="/assets/images/hero-glamour-studio.jpg"
                                     alt="Ambiente Conceito Glamour Studio"
+                                    width={600}
+                                    height={520}
                                     className="hero-main-img"
+                                    preload={true}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                                 />
                             </div>
 

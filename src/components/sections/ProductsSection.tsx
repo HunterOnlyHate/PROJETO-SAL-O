@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { salonData, Product } from '@/data/salonData';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
+import { salonData } from '@/data/salonData';
 import { useCart } from '@/context/CartContext';
 
 interface ProductsSectionProps {
@@ -10,7 +12,7 @@ interface ProductsSectionProps {
 }
 
 export function ProductsSection({ isFullPage = false }: ProductsSectionProps) {
-    const { addItem, openCart } = useCart();
+    const { addItem } = useCart();
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -99,12 +101,19 @@ export function ProductsSection({ isFullPage = false }: ProductsSectionProps) {
                 >
                     {displayProducts.map((product) => (
                         <div key={product.id} className="product-card">
-                            <div className="product-card-image-wrap">
-                                <img
-                                    src={product.image}
+                            <div className="product-img-wrapper">
+                                <Image
+                                    src={product.image || '/assets/images/logo-glamour-studio.jpg'}
                                     alt={product.name}
-                                    className="product-card-img"
-                                    loading="lazy"
+                                    fill
+                                    unoptimized={!isOptimizableImage(product.image)}
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                    style={{ objectFit: 'contain', padding: '8px' }}
+                                    onError={(e) => {
+                                        const target = e.currentTarget;
+                                        target.srcset = '';
+                                        target.src = '/assets/images/logo-glamour-studio.jpg';
+                                    }}
                                 />
                                 {product.badge && (
                                     <span className="product-badge">{product.badge}</span>

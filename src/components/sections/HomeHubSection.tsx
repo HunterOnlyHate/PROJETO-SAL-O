@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function HomeHubSection() {
     return (
@@ -19,10 +20,12 @@ export function HomeHubSection() {
                     {/* Card 1: Procedimentos & Serviços */}
                     <div className="home-hub-card services-hub-card">
                         <div className="hub-card-header-img">
-                            <img
+                            <Image
                                 src="/assets/images/progressiva-depois.jpg"
                                 alt="Procedimentos Capilares Glamour Studio"
-                                loading="lazy"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                style={{ objectFit: 'cover' }}
                             />
                             <div className="hub-card-overlay">
                                 <span className="hub-badge-pill gold">
@@ -53,10 +56,12 @@ export function HomeHubSection() {
                     {/* Card 2: Boutique Oficial WePink */}
                     <div className="home-hub-card products-hub-card">
                         <div className="hub-card-header-img">
-                            <img
+                            <Image
                                 src="/assets/images/wepink-bs-liberte.jpg"
                                 alt="Boutique WePink Glamour Studio"
-                                loading="lazy"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                style={{ objectFit: 'cover' }}
                             />
                             <div className="hub-card-overlay">
                                 <span className="hub-badge-pill pink">

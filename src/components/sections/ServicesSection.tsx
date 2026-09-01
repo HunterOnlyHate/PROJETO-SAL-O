@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { salonData, Service } from '@/data/salonData';
+import Image from 'next/image';
+import { isOptimizableImage } from '@/lib/imageUtils';
+import { salonData } from '@/data/salonData';
 import { useBooking } from '@/context/BookingContext';
 
 export function ServicesSection() {
     const { openBookingModal } = useBooking();
     const [activeCategory, setActiveCategory] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery] = useState('');
 
     const filteredServices = salonData.services.filter((service) => {
         const matchCategory = activeCategory === 'all' || service.category === activeCategory;
@@ -50,12 +52,19 @@ export function ServicesSection() {
                 <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: '24px' }}>
                     {filteredServices.map((service) => (
                         <div key={service.id} className="service-card">
-                            <div className="service-card-image-wrap">
-                                <img
-                                    src={service.image}
+                            <div className="service-card-image">
+                                <Image
+                                    src={service.image || '/assets/images/logo-glamour-studio.jpg'}
                                     alt={service.name}
-                                    className="service-card-img"
-                                    loading="lazy"
+                                    fill
+                                    unoptimized={!isOptimizableImage(service.image)}
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    style={{ objectFit: 'contain', padding: '6px' }}
+                                    onError={(e) => {
+                                        const target = e.currentTarget;
+                                        target.srcset = '';
+                                        target.src = '/assets/images/logo-glamour-studio.jpg';
+                                    }}
                                 />
                                 {service.badge && (
                                     <span className="service-badge">{service.badge}</span>
